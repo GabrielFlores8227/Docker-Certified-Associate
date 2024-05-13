@@ -148,3 +148,9 @@ docker image rm IMAGE_ID
 ```bash
 docker rmi IMAGE_ID
 ```
+
+Delete unused images from the system:
+
+```bash
+docker image prune
+```
