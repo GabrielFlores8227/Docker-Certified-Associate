@@ -16,30 +16,6 @@ results in:
 
   - Faster image build.
 
-Download an image from a remote registry to the local machine:
-
-```bash
-docker image pull IMAGE[:TAG]
-```
-
-List the layers used to build an image:
-
-```bash
-docker image history IMAGE[:TAG]
-```
-
-List images: 
-
-```bash
-docker image ls
-```
-
-Add the -a flag to include intermediate images:
-
-```bash
-docker image ls -a
-```
-
 ### Dockerfiles
 
 If you want to create your own images. you can do so with a Dockerfile. A Dockerfile is a set of instructions
@@ -122,4 +98,53 @@ COPY --from=compiler /compiler/helloworld ./
 
 # Define the command to run the executable when the container starts
 CMD ["./helloworld"]
+```
+
+### Managing Images
+
+Download an image from a remote registry to the local machine:
+
+```bash
+docker image pull IMAGE[:TAG]
+```
+
+List the layers used to build an image:
+
+```bash
+docker image history IMAGE[:TAG]
+```
+
+List images: 
+
+```bash
+docker image ls
+```
+
+Add the -a flag to include intermediate images:
+
+```bash
+docker image ls -a
+```
+
+Get detailed information about an image:
+
+```bash
+docker image inspect IMAGE
+```
+
+Use `--format` flag to get only a subset of the information (use Go templates):
+
+```bash
+docker image inspect IMAGE --format TEMPLATE
+```
+
+These commands can both be used to delete an image. Note that if an image has other
+tags, they must be deleted first:
+
+```bash
+docker image rm IMAGE_ID
+```
+
+```bash
+docker rmi IMAGE_ID
 ```
