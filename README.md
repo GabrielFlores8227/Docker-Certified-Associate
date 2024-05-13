@@ -16,17 +16,29 @@ results in:
 
   - Faster image build.
 
+Download an image from a remote registry to the local machine:
+
 ```bash
 docker image pull IMAGE[:TAG]
 ```
 
-Download an image from a remote registry to the local machine.
+List the layers used to build an image:
 
 ```bash
 docker image history IMAGE[:TAG]
 ```
 
-List the layers used to build an image.
+List images: 
+
+```bash
+docker image ls
+```
+
+Add the -a flag to include intermediate images:
+
+```bash
+docker image ls -a
+```
 
 ### Dockerfiles
 
