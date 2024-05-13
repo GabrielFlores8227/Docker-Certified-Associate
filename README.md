@@ -43,7 +43,7 @@ which are used to construct a Docker image. These instructions are called direct
   
 - `ENTRYPOINT`: Specify default executable.
   
-- `ENV*`: Set environment variables.
+- `ENV`: Set environment variables.
   
 - `EXPOSE`: Describe which ports your application is listening on.
   
