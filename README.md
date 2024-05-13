@@ -16,13 +16,13 @@ results in:
 
   - Faster image build.
 
-```Dockerfile
+```bash
 docker image pull IMAGE[:TAG]
 ```
 
 Download an image from a remote registry to the local machine.
 
-```Dockerfile
+```bash
 docker image history IMAGE[:TAG]
 ```
 
@@ -79,3 +79,35 @@ Docker supports the ability to perform multi-stage builds. Multi-stage builds ha
 one `FROM` diirective in the Dockerfile, with each `FROM` directive starting a new stage.
 Each stage begins a completely new set of file system layers, allowing you to
 selectively copy only the files you need from previous layers.
+
+Here is an example of an efficient Dockerfile utilizing multi-stage builds:
+
+```Dockerfile
+# Use the official Golang image as the base image for the compiler stage
+FROM golang:latest AS compiler
+
+# Set the working directory within the container for the compiler stage
+WORKDIR /compiler
+
+# Copy the source code (helloworld.go) to the working directory
+COPY ./helloworld.go .
+
+# Initialize Go module to manage dependencies
+RUN go mod init helloworld
+
+# Build the Go application for Linux (GOOS=linux) with CGO disabled (-installsuffix cgo)
+# and output the binary as 'helloworld' in the working directory
+RUN GOOS=linux go build -a -installsuffix cgo -o helloworld .
+
+# Start a new stage using the lightweight Alpine Linux as the base image
+FROM alpine:latest
+
+# Set the working directory within the container for the runtime stage
+WORKDIR /root
+
+# Copy the built executable 'helloworld' from the compiler stage to the working directory of the runtime stage
+COPY --from=compiler /compiler/helloworld ./
+
+# Define the command to run the executable when the container starts
+CMD ["./helloworld"]
+```
