@@ -33,39 +33,49 @@ List the layers used to build an image.
 If you want to create your own images. you can do so with a Dockerfile. A Dockerfile is a set of instructions
 which are used to construct a Docker image. These instructions are called directives.
 
-- **ADD**: Add local or remote files and directories.
+- `ADD`: Add local or remote files and directories.
   
-- **ARG**: Use build-time variables.
+- `ARG`: Use build-time variables.
   
-- **CMD**: Specify default commands.
+- `CMD`: Specify default commands.
   
-- **COPY**: Copy files and directories.
+- `COPY`: Copy files and directories.
   
-- **ENTRYPOINT**: Specify default executable.
+- `ENTRYPOINT`: Specify default executable.
   
-- **ENV**: Set environment variables.
+- `ENV*`: Set environment variables.
   
-- **EXPOSE**: Describe which ports your application is listening on.
+- `EXPOSE`: Describe which ports your application is listening on.
   
-- **FROM**: Create a new build stage from a base image.
+- `FROM`: Create a new build stage from a base image.
   
-- **HEALTHCHECK**: Check a container's health on startup.
+- `HEALTHCHECK`: Check a container's health on startup.
   
-- **LABEL**: Add metadata to an image.
+- `LABEL`: Add metadata to an image.
   
-- **MAINTAINER**: Specify the author of an image.
+- `MAINTAINER`: Specify the author of an image.
   
-- **ONBUILD**: Specify instructions for when the image is used in a build.
+- `ONBUILD`: Specify instructions for when the image is used in a build.
   
-- **RUN**: Execute build commands.
+- `RUN`: Execute build commands.
   
-- **SHELL**: Set the default shell of an image.
+- `SHELL`: Set the default shell of an image.
   
-- **STOPSIGNAL**: Specify the system call signal for exiting a container.
+- `STOPSIGNAL`: Specify the system call signal for exiting a container.
   
-- **USER**: Set user and group ID.
+- `USER`: Set user and group ID.
   
-- **VOLUME**: Create volume mounts.
+- `VOLUME`: Create volume mounts.
   
-- **WORKDIR**: Change working directory.
+- `WORKDIR`: Change working directory.
 
+### Efficient Docker Images
+
+When working with Docker in real world, it is important to create Docker images that are as
+efficient as possible. This means that they are as small as possible and result in ephemeral 
+containers that can be started, stopped, and destroyed easily.
+
+Docker supports the ability to perform multi-stage builds. Multi-stage builds have more than
+one `FROM` diirective in the Dockerfile, with each `FROM` directive starting a new stage.
+Each stage begins a completely new set of file system layers, allowing you to
+selectively copy only the files you need from previous layers.
