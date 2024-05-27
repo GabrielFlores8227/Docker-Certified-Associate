@@ -187,3 +187,26 @@ To create a basic registry, simply run a container using registry image and publ
 ```bash
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 ```
+
+## Chapter 2 - Orchestration
+
+### Docker Swarm
+
+Docker includesa feature called swarm mode, which allows you to build a distributed cluster of docker machines to 
+run your containers.
+
+Docker swarm provides many useful features, and can help facilitate orchestration, high-availability, and scaling.
+
+### Configuring a Swarm Manager
+
+Setting up a new swarm is relatively simple. All we have to do is create the first swarm manager:
+
+- Install Docker CE on the Swarm Manager server.
+
+- Initialize the swarm with `docker swarm init --advertise-addr <IP>`.
+
+- If necessary, leave the swarm with `docker swarm leave`.
+
+Once the swarm is initialized, you can see some info about the swarm with `docker info`.
+
+You can list the current node in the swarm with `docker node ls`
