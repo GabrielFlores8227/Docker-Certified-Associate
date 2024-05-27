@@ -105,13 +105,13 @@ CMD ["./helloworld"]
 Download an image from a remote registry to the local machine:
 
 ```bash
-docker image pull IMAGE[:TAG]
+docker image pull <IMAGE:TAG>
 ```
 
 List the layers used to build an image:
 
 ```bash
-docker image history IMAGE[:TAG]
+docker image history <IMAGE:TAG>
 ```
 
 List images: 
@@ -129,28 +129,48 @@ docker image ls -a
 Get detailed information about an image:
 
 ```bash
-docker image inspect IMAGE
+docker image inspect <IMAGE>
 ```
 
 Use `--format` flag to get only a subset of the information (use Go templates):
 
 ```bash
-docker image inspect IMAGE --format TEMPLATE
+docker image inspect <IMAGE> --format TEMPLATE
 ```
 
 These commands can both be used to delete an image. Note that if an image has other
 tags, they must be deleted first:
 
 ```bash
-docker image rm IMAGE_ID
+docker image rm <IMAGE_ID>
 ```
 
 ```bash
-docker rmi IMAGE_ID
+docker rmi <IMAGE_ID>
 ```
 
 Delete unused images from the system:
 
 ```bash
 docker image prune
+```
+
+### Flattening an Image
+
+Sometimes, images with fewer layers can perform better. In a few cases, you may want to take an image
+with many layers and flatten them into a single layer.
+
+Docker does not provide an official method for doing this, but you can accomplish it by doing the 
+following:
+
+```bash
+docker run --name <CONTAINER_NAME> <IMAGE>
+```
+
+```bash
+docker export <CONTAINER_NAME> > <CONTAINER_NAME>.tar
+```
+
+```bash
+cat <CONTAINER_NAME>.tar | docker import - flat:latest
 ```
