@@ -174,3 +174,16 @@ docker export <CONTAINER_NAME> > <CONTAINER_NAME>.tar
 ```bash
 cat <CONTAINER_NAME>.tar | docker import - flat:latest
 ```
+
+### Docker Registries
+
+A Docker Registry is responsible for storing and distributing Docker images.
+
+You can also create your own registries using Docker's open source registry software, or Docker Trusted Registry,
+the non-free enterprise solution.
+
+To create a basic registry, simply run a container using registry image and publish port 5000.
+
+```bash
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+```
