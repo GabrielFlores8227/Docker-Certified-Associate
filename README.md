@@ -1,4 +1,28 @@
-## Chapter 1 - Image Creation, Management, and Registry
+## Chapter 1 - Introduction
+
+### Namespaces
+
+Namespaces are Linux technologies that allows processes to be isolated in terms of the resources that they see. They 
+can be used to prevent different processes from interfering or interacting with one another.
+
+Docker uses namespaces to isolate containers. This technology allows containers to operate independently. and securely. 
+
+Docker uses namespaces as the following to isolate resources for containers:
+
+- `pid`: Process isolation
+- `net`: Network interfaces
+- `ipc`: Inter-process communication
+- `mnt`: Filesystem mounts
+- `uts`: Kernel and version identifiers
+- `user namespaces`: Requires special configuration. Allows container processes to run as root inside the container while mapping that user to an unprivileged user on the host.
+
+### Control Groups
+
+Docker Engine on Linux also relies on another technology called control groups (cgroups). A cgroup limits an application
+to a specific set of resources. Control groups allow Docker Engine to share available hardware resources to containers and 
+optionally enforce limits and constraints. For example, you can limit the memory available to a specific container.
+
+## Chapter 2 - Image Creation, Management, and Registry
 
 ### Docker Images
 
@@ -188,7 +212,7 @@ To create a basic registry, simply run a container using registry image and publ
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 ```
 
-## Chapter 2 - Orchestration
+## Chapter 3 - Orchestration
 
 ### Docker Swarm
 
@@ -220,5 +244,27 @@ With a manager set up, we can add some worker nodes to the swarm.
 - Get a join command from the manager: Run `docker swarm join-token worker` on the manager node to get a join command.
 
 - Run the join command on both workers: Copy the join command from the manager and run it on both workers.
+
+### Swarm Backup and Restore
+
+In a production enviroment, it's always a good idea to backup critical data.
+
+Backing up Docker swarm data is fairly simple. To backup, do the following on a swarm manager.
+
+- Stop the Docker service.
+
+- Backup all data in the directory `/var/lib/docker/swarm`.
+
+- Start the Docker service.
+
+To restore the previous backup: 
+
+- Stop the Docker service.
+
+- Delete any existing files or directories under `/var/lib/docker/swarm`.
+
+- Copy the backed-up files to `/var/lib/docker/swarm`.
+
+- Start the Docker service.
 
 - Verify both workers have successfully joined the swarm: Run `docker node ls` on the manager and verify that you can see the two worker nodes listed.
