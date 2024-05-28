@@ -210,3 +210,15 @@ Setting up a new swarm is relatively simple. All we have to do is create the fir
 Once the swarm is initialized, you can see some info about the swarm with `docker info`.
 
 You can list the current node in the swarm with `docker node ls`
+
+### Configuring a Swarm Node
+
+With a manager set up, we can add some worker nodes to the swarm.
+
+- Install Docker CE on both worker nodes.
+
+- Get a join command from the manager: Run `docker swarm join-token worker` on the manager node to get a join command.
+
+- Run the join command on both workers: Copy the join command from the manager and run it on both workers.
+
+- Verify both workers have successfully joined the swarm: Run `docker node ls` on the manager and verify that you can see the two worker nodes listed.
