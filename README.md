@@ -2,10 +2,10 @@
 
 ### Namespaces
 
-Namespaces are Linux technologies that allows processes to be isolated in terms of the resources that they see. They 
+Namespaces are Linux technologies that allows processes to be isolated in terms of the resources that they see. They
 can be used to prevent different processes from interfering or interacting with one another.
 
-Docker uses namespaces to isolate containers. This technology allows containers to operate independently. and securely. 
+Docker uses namespaces to isolate containers. This technology allows containers to operate independently. and securely.
 
 Docker uses namespaces as the following to isolate resources for containers:
 
@@ -19,7 +19,7 @@ Docker uses namespaces as the following to isolate resources for containers:
 ### Control Groups
 
 Docker Engine on Linux also relies on another technology called control groups (cgroups). A cgroup limits an application
-to a specific set of resources. Control groups allow Docker Engine to share available hardware resources to containers and 
+to a specific set of resources. Control groups allow Docker Engine to share available hardware resources to containers and
 optionally enforce limits and constraints. For example, you can limit the memory available to a specific container.
 
 ## Chapter 2 - Image Creation, Management, and Registry
@@ -27,18 +27,18 @@ optionally enforce limits and constraints. For example, you can limit the memory
 ### Docker Images
 
 A Docker image is a file containing the code and components needed to run software in a container.
-Containers and images use a layered file system. Each layer contains only the differences from the 
-previous layer. The image consists of one or more read-only layers, while the container adds one 
+Containers and images use a layered file system. Each layer contains only the differences from the
+previous layer. The image consists of one or more read-only layers, while the container adds one
 additionall writable layer.
 
-The layered file system allows multiple images and containers to share the same layers. This 
+The layered file system allows multiple images and containers to share the same layers. This
 results in:
 
-  - Smaller overall storage footprint.
+- Smaller overall storage footprint.
 
-  - Faster image transfers.
+- Faster image transfers.
 
-  - Faster image build.
+- Faster image build.
 
 ### Dockerfiles
 
@@ -46,45 +46,28 @@ If you want to create your own images. you can do so with a Dockerfile. A Docker
 which are used to construct a Docker image. These instructions are called directives.
 
 - `ADD`: Add local or remote files and directories.
-  
 - `ARG`: Use build-time variables.
-  
 - `CMD`: Specify default commands.
-  
 - `COPY`: Copy files and directories.
-  
 - `ENTRYPOINT`: Specify default executable.
-  
 - `ENV`: Set environment variables.
-  
 - `EXPOSE`: Describe which ports your application is listening on.
-  
 - `FROM`: Create a new build stage from a base image.
-  
 - `HEALTHCHECK`: Check a container's health on startup.
-  
 - `LABEL`: Add metadata to an image.
-  
 - `MAINTAINER`: Specify the author of an image.
-  
 - `ONBUILD`: Specify instructions for when the image is used in a build.
-  
 - `RUN`: Execute build commands.
-  
 - `SHELL`: Set the default shell of an image.
-  
 - `STOPSIGNAL`: Specify the system call signal for exiting a container.
-  
 - `USER`: Set user and group ID.
-  
 - `VOLUME`: Create volume mounts.
-  
 - `WORKDIR`: Change working directory.
 
 ### Efficient Docker Images
 
 When working with Docker in real world, it is important to create Docker images that are as
-efficient as possible. This means that they are as small as possible and result in ephemeral 
+efficient as possible. This means that they are as small as possible and result in ephemeral
 containers that can be started, stopped, and destroyed easily.
 
 Docker supports the ability to perform multi-stage builds. Multi-stage builds have more than
@@ -138,7 +121,7 @@ List the layers used to build an image:
 docker image history <IMAGE:TAG>
 ```
 
-List images: 
+List images:
 
 ```bash
 docker image ls
@@ -184,7 +167,7 @@ docker image prune
 Sometimes, images with fewer layers can perform better. In a few cases, you may want to take an image
 with many layers and flatten them into a single layer.
 
-Docker does not provide an official method for doing this, but you can accomplish it by doing the 
+Docker does not provide an official method for doing this, but you can accomplish it by doing the
 following:
 
 ```bash
@@ -216,7 +199,7 @@ docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
 ### Docker Swarm
 
-Docker includesa feature called swarm mode, which allows you to build a distributed cluster of docker machines to 
+Docker includesa feature called swarm mode, which allows you to build a distributed cluster of docker machines to
 run your containers.
 
 Docker swarm provides many useful features, and can help facilitate orchestration, high-availability, and scaling.
@@ -257,7 +240,7 @@ Backing up Docker swarm data is fairly simple. To backup, do the following on a 
 
 - Start the Docker service.
 
-To restore the previous backup: 
+To restore the previous backup:
 
 - Stop the Docker service.
 
@@ -268,3 +251,60 @@ To restore the previous backup:
 - Start the Docker service.
 
 - Verify both workers have successfully joined the swarm: Run `docker node ls` on the manager and verify that you can see the two worker nodes listed.
+
+### Swarm autolock
+
+Docker swarm encrypts sensitive data for security reasons, such as:
+
+- Raft logs on swarm managers.
+
+- TLS communication between swarm nodes.
+
+By default, Docker manages the keys used for this encryption automatically, but they are
+stored unencrypted on the  managers's disks.
+
+Autolock is a feature that automatically locks the swarm, allowing you to manage the encryption keys
+yourself. This gives you control of the keys and can allow for greater security.
+
+However, it requires you to unlock the swarm everytime Docker is restarted on one of your managers.
+
+#### Enable and Disable Autolock
+
+You can enable autolock when you initialize a new swarm with the `--autolock` flag.
+
+```bash
+docker swarm init --autolock
+```
+
+Enable autolock on a running swarm:
+
+```bash
+docker swarm update --autolock=true
+```
+
+Disable autolock on a running swarm:
+
+
+```bash
+docker swarm update --autolock=true
+```
+
+#### Working with Autolock
+
+Whenever Docker restarts on a manager you must unlock the swarm:
+
+```bash
+docker swarm unlock
+```
+
+Get the current unlock key for a running swarm:
+
+```bash
+docker swarm unlock-key
+```
+
+Rotate the unlock key:
+
+```bash
+docker swarm unlock-key --roate
+```
