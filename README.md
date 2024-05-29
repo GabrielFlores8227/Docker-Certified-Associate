@@ -667,7 +667,7 @@ docker image prune -a
 
 Docker uses an architecture called 'Container Networking Model (CNM)' to manage networking for Docker containers. The CNM utilizes the following concepts:
 
-<img src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/ikkltkeemeup.png">
+<img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/ikkltkeemeup.png">
 
 - **Sandbox**: An isolated unit containing all networking components associated with a single container. Usually a Linux Network namespace.
 
@@ -678,3 +678,25 @@ Docker uses an architecture called 'Container Networking Model (CNM)' to manage 
 - **Network Driver**: Handles the actual implementation of the CNM concepts.
 
 - **IPAM Driver**: IPAM means IP Address Management. Automatically allocates subnets and IP addresses for networks and endpoints.
+
+#### Networking Drivers
+
+Docker includes several built0in network drivers, knowns as 'Native Network Drivers'.
+ (CNM)
+These network drivers implement the concept descrived in the 'Container Networking Model'.
+
+The 'Native Network Drivers' are host, bridge, overlay, MACVLAN, none. With `docker run`, you can choose a network driver by using `--net=<DRIVER>`
+
+#### The Host Network Driver
+
+The Host Network Driver allows containers to use the host's network stack directly.
+
+<img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/glgscpmrqrlm.png">
+
+- Containers use the host's networking resources directly.
+
+- No sandboxes, all containers on the host using the host driver share the same network namespace.
+
+- No two containers can use the same port(s).
+
+- Simple and easy setup, one or only few containers on a single host.
