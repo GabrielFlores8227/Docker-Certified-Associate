@@ -699,11 +699,53 @@ The Host Network Driver allows containers to utilize the host's network stack di
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/glgscpmrqrlm.png">
 
+To run a container using the host network driver in Docker, you can specify the network mode as 'host' when running the container. 
+
+```bash
+docker run --net host <IMAGE>
+```
+
+or 
+
+```bash
+docker run --network=host <IMAGE>
+```
+
 ##### The Bridge Network Driver
 
 The Bridge Network Driver uses Linux bridge networks to provide connectivity between containers on the same host. This is the default driver for containers not running in a swarm. It creates a Linux bridge for each Docker network and establishes a default bridge network named bridge0. Containers automatically connect to this default bridge if no other network is specified. The bridge network driver offers isolated networking among containers on a single host, making it suitable for standard applications where container-to-container communication is required without exposing them to the host's network directly.
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/nfzcchkupzbb.png">
+
+When you run a container without specifying a network, Docker automatically connects it to the default bridge network. This default bridge network simplifies container deployment by providing a basic networking setup out of the box. Containers on this network can communicate with each other by default, making it convenient for many use cases.
+
+```bash
+docker run <IMAGE>
+```
+
+However, in certain scenarios, you may require more control and isolation over your container networking. In such cases, you can create your own custom bridge network. Custom bridge networks allow you to define specific network configurations tailored to your application's needs. You may want to create a custom bridge network to:
+
+- Isolate your containers from other networks or the host network.
+
+- Provide a specific naming convention or network settings.
+
+- Segment your application into different network layers for security or performance reasons.
+
+To create and run containers on a custom bridge network, follow these steps:
+
+Create a custom bridge network using the `docker network create command`, specifying the desired network name.
+
+```bash
+docker network create <NETWORK_NAME>
+```
+
+When running a container, specify the custom bridge network using the `--net` flag along with the name of the network created in the previous step.
+
+```bash
+docker run --net <NETWORK_NAME> <IMAGE>
+```
+
+By creating and utilizing a custom bridge network, you gain greater flexibility and control over your container networking environment, allowing you to tailor it to your specific requirements.
 
 ##### The Overlay Network Driver
 
@@ -711,11 +753,61 @@ The Overlay Network Driver facilitates seamless communication between containers
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/znzxlgsftsnd.png">
 
+In a Docker swarm environment, when you deploy services without specifying a network, Docker automatically connects them to the default overlay network. The default overlay network simplifies service deployment by providing a built-in networking solution for container communication across multiple hosts within the swarm. Containers and services connected to this network can communicate seamlessly across swarm nodes, making it convenient for distributed applications.
+
+```bash
+docker service create --name <SERVICE> <IMAGE>
+```
+
+However, in more complex swarm setups or specific application requirements, you may need to create your own custom overlay network. Custom overlay networks allow you to define specific network configurations tailored to your application's needs within the swarm environment. You might create a custom overlay network to:
+
+- Isolate your services from other networks or the host network.
+
+- Configure network settings such as subnet range, ingress routing mesh, or encryption.
+
+- Organize services into logical network segments for better management and security.
+
+To create and deploy services on a custom overlay network, follow these steps:
+
+Create a custom overlay network using the `docker network create` command, specifying the `--driver overlay` option and the desired network name.
+
+```bash
+docker network create --driver overlay <NETWORK_NAME>
+```
+
+When deploying a service in the swarm, specify the custom overlay network using the `--net` flag along with the name of the network created in the previous step.
+
+```bash
+docker service create --name <SERVICE> --net <NETWORK_NAME> <IMAGE>
+```
+
+By creating and utilizing a custom overlay network, you gain greater flexibility and control over your service networking within the Docker swarm, allowing you to tailor it to your specific requirements.
+
 ##### The MACVLAN Network Driver
 
 The MACVLAN Network Driver offers a lightweight approach by directly connecting container interfaces to host interfaces. It associates with Linux interfaces directly instead of utilizing a bridge interface, offering less overhead and latency. However, configuration is more complex, and there's a stronger dependency between MACVLAN and the external network. It's ideal for scenarios requiring extremely low latency or containers with IP addresses in the external subnet.
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/mnkkmqnzbopk.png">
+
+When you run a container without specifying a network driver, Docker connects it to the default network, which is typically the bridge network. However, for scenarios where you require containers to directly connect to physical networks with their own MAC addresses, you may opt for the MACVLAN driver.
+
+The MACVLAN driver offers a lightweight solution by directly connecting container interfaces to host interfaces. This approach is beneficial for scenarios requiring containers to appear as physical devices on the network, with their own MAC addresses and potentially separate IP addresses.
+
+To leverage the MACVLAN driver, follow these steps:
+
+Create a custom MACVLAN network using the docker network create command, specifying the `--driver macvlan` option and providing additional configuration such as subnet, gateway, parent interface, etc.
+
+```bash
+docker network create --driver macvlan --subnet=192.168.1.0/24 --gateway=192.168.1.1 -o parent=eth0 <NETWORK_NAME>
+```
+
+When running a container, specify the custom MACVLAN network using the --network flag along with the name of the network created in the previous step.
+
+```bash
+docker run --net <NETWORK_NAME> <IMAGE>
+```
+
+By creating and utilizing a custom MACVLAN network, you gain the ability to integrate containers directly into your existing physical network infrastructure, enabling them to behave like separate physical devices on the network. This is particularly useful for scenarios where containers require direct access to specific network resources or need to communicate directly with other devices on the network.
 
 ##### The None Network Driver
 
@@ -723,3 +815,8 @@ The None Network Driver provides complete isolation for containers without any n
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/feveisqnojhu.png">
 
+To run a container using the None network driver, you simply specify the `--net none` option when launching the container.
+
+```bash
+docker run --net none <IMAGE>
+```
