@@ -743,7 +743,7 @@ The MACVLAN Network Driver offers a more lightweight implementation by connectin
 
 #### The None Network Driver
 
-<img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/feveisqnojhu">
+<img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/feveisqnojhu.png">
 
 The None Network Driver does not provide any networking implementation.
 
