@@ -687,7 +687,7 @@ These network drivers implement the concept descrived in the 'Container Networki
 
 The 'Native Network Drivers' are host, bridge, overlay, MACVLAN, none. With `docker run`, you can choose a network driver by using `--net=<DRIVER>`
 
-#### The Host Network Driver
+##### The Host Network Driver
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/glgscpmrqrlm.png">
 
@@ -701,7 +701,7 @@ The Host Network Driver allows containers to use the host's network stack direct
 
 - Simple and easy setup, one or only few containers on a single host.
 
-#### The Bridge Network Driver
+##### The Bridge Network Driver
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/nfzcchkupzbb.png">
 
@@ -715,7 +715,7 @@ The Bridge Network Driver uses Linux bridge networks to provide connectivity bet
 
 - Isolated networking among containers on a single host.
 
-#### The Overlay Network Driver
+##### The Overlay Network Driver
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/znzxlgsftsnd.png">
 
@@ -727,7 +727,7 @@ The Overlay Network Driver provides connectivity between containers across multi
 
 - Networking between containers in a swarm.
 
-#### The MACVLAN Network Driver
+##### The MACVLAN Network Driver
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/mnkkmqnzbopk.png">
 
@@ -741,7 +741,7 @@ The MACVLAN Network Driver offers a more lightweight implementation by connectin
 
 - When there is a need for extremely low latency, or a need for containers with IP addresses in the external subnet.
 
-#### The None Network Driver
+##### The None Network Driver
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/feveisqnojhu.png">
 
