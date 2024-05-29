@@ -667,6 +667,8 @@ docker image prune -a
 
 Docker uses an architecture called 'Container Networking Model (CNM)' to manage networking for Docker containers. The CNM utilizes the following concepts:
 
+<img src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/ikkltkeemeup.png">
+
 - **Sandbox**: An isolated unit containing all networking components associated with a single container. Usually a Linux Network namespace.
 
 - **Endpoint**: Connects a sandbox to a network. Each sandbox/container can have any number of endpoints, but has exactly one endpoint for each network it is connected to.
