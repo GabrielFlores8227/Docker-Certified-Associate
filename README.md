@@ -112,13 +112,13 @@ CMD ["./helloworld"]
 Download an image from a remote registry to the local machine:
 
 ```bash
-docker image pull <IMAGE:TAG>
+docker image pull <IMAGE>
 ```
 
 List the layers used to build an image:
 
 ```bash
-docker image history <IMAGE:TAG>
+docker image history <IMAGE>
 ```
 
 List images:
@@ -252,7 +252,7 @@ To restore the previous backup:
 
 - Verify both workers have successfully joined the swarm: Run `docker node ls` on the manager and verify that you can see the two worker nodes listed.
 
-### Swarm autolock
+### Locking and Unlocking a Swarm Cluster
 
 Docker swarm encrypts sensitive data for security reasons, such as:
 
@@ -261,7 +261,7 @@ Docker swarm encrypts sensitive data for security reasons, such as:
 - TLS communication between swarm nodes.
 
 By default, Docker manages the keys used for this encryption automatically, but they are
-stored unencrypted on the  managers's disks.
+stored unencrypted on the managers's disks.
 
 Autolock is a feature that automatically locks the swarm, allowing you to manage the encryption keys
 yourself. This gives you control of the keys and can allow for greater security.
@@ -283,7 +283,6 @@ docker swarm update --autolock=true
 ```
 
 Disable autolock on a running swarm:
-
 
 ```bash
 docker swarm update --autolock=true
@@ -308,3 +307,372 @@ Rotate the unlock key:
 ```bash
 docker swarm unlock-key --roate
 ```
+
+### High-Availability in a Swarm Cluster
+
+#### Multiple Managers
+
+In order to build a highly-available and fault-tolerant Swarm, it is a good idea to
+have multiple swarm managers.
+
+Docker uses the Raft consensus algorithm to maintain a consistent cluster state
+across multiple managers.
+
+More manager nodes means better fault tolerance. However, there can be a decrease
+in performance as the number of managers grows, since more managers means more network traffic as managers afree to updates in the cluster state.
+
+#### Quorum
+
+A Quorum is the majority (more than half) of the managers in a swarm. For example,
+for a swarm with 5 managers, the quorum is 3.
+
+A quorum must be maintained in order to make changes to the cluster state. If a
+quorum is not available, nodes cannot be added or removed, new tasks cannot be added, and existing tasks cannot be changed or moved.
+
+Note that since a quorum requires more than half of the manager nodes, it is
+recommended to have an odd number of managers.
+
+#### Availability Zones
+
+Docker recommends that you distribute your manager nodes across at least 3 availability zones. Distribute your managers across these zones so that you can maintain a quorum if one of them goes down.
+
+| Manager Nodes | AZ Distribution |
+| ------------- | --------------- |
+| 3             | 1-1-1           |
+| 5             | 2-2-1           |
+| 7             | 3-2-2           |
+| 9             | 3-3-3           |
+
+### Introoduction to Docker Services
+
+A Service is used to run an application on Docker Swarm. A service specifies a
+set of one or more replica tasks. These tasks will be distributed automatically
+across the nodes in the cluster and executed as containers.
+
+```bash
+docker service create [OPTIONS] <IMAGE> [ARGS]
+```
+
+- `--replica`: Specify the number of replica tasks to create for the service.
+
+- `--name`: Specify a name for the service.
+
+- `p`: Publish a port so the service can be accessed externally. The port
+  is published on every node in the swarm
+
+#### Managing Services
+
+List current services:
+
+```bash
+docker service ls
+```
+
+List a service's tasks
+
+```bash
+docker service ps <SERVICE>
+```
+
+Get more information about a service
+
+```bash
+docker service inspect <SERVICE>
+```
+
+Make changes to a service:
+
+```bash
+docker service update [OPTIONS] <SERVICE>
+```
+
+Delete an existing service:
+
+```bash
+docker service rm <SERVICE>
+```
+
+#### Templates
+
+Templates can be used to give somewhat dynamic values to some flags with `docker service create`
+
+The following flags accept templates:
+
+- `--hostname`
+
+- `--mount`
+
+- `--env`
+
+This command sets an enviroment variable for each container that contains the hostname of the node that container is running on:
+
+```bash
+docker service create --env NODE_HOSTNAME="{{.Node.Hostname}}" nginx
+```
+
+#### Replicated Services vs. Global Services
+
+Replicated Services run the requests number of replica tasks across the swarm cluster.
+
+```bash
+docker service create --replicas 3 nginx
+```
+
+Global Services runn one task on each node in the cluster.
+
+```bash
+docker service create --mode global nginx
+```
+
+#### Scaling Services
+
+Scaling Services means changing the number of replica tasks. There are two ways to scale a service.
+
+Update the service with a new number of replicas.
+
+```bash
+docker service update --replicas REPLICAS SERVICE
+```
+
+Use docker service scale
+
+```bash
+docker service scale SERVICE=REPLICAS
+```
+
+### Using docker inspect
+
+Docker inspect is a command that allows you to get information about Docker objects, such as containers, images, services, etc.
+
+```bash
+docker inspect <OBJECT_ID>
+```
+
+If you know what kind of object you are inspecting, you can also use an allternate form of the command:
+
+```bash
+docker container inspect <CONTAINER>
+```
+
+```bash
+docker service inspect <CONTAINER>
+```
+
+This form allows you to specify an object name instead of an ID.
+
+For some object types, you can also supply `--pretty` flag to get a more
+readable output.
+
+Use the `--format` flag to retrieve a specific subsection of the data using a Go template.
+
+```bash
+docker service inspect --format '{{.ID}}' <SERVICE>
+```
+
+## Chapter 4 - Storage and Volumes
+
+### Docker Storage in Depth
+
+Storage drivers are sometims known as Graph drivers. The proper storage driver to use often depends ib your operating system and other local configuration factors.
+
+- `overlay2`: Current Ubuntu and CentOS/RHEL versions.
+
+- `aufs`: Ubuntu 14.04 and older.
+
+- `devicemapper`: CentOS 7 and earlier.
+
+#### Storage models
+
+Persistent data can be managed using several storage models.
+
+##### Filesystem storage
+
+- Data is stored in the form of a file system.
+
+- Used by `overlay2` and `aufs`.
+
+- Efficient use of memory.
+
+- Inefficient with write-heavy workloads.
+
+##### Block storage
+
+- Stores data in blocks.
+
+- Used by `devicemapper`.
+
+- Efficient with write-heavy workloads.
+
+### Configuring DeviceMapper
+
+Device Mapper is one of the Docker storage drivers available for some Linux distributions. It is the default storage driver for CentOS 7 and earlier.
+
+You can customize your DeviceMapper configuration using the daemon config file.
+
+DeviceMapper supports two modes:
+
+#### loop-vm mode
+
+- Loopback mechanism simulates an additional physical disk using files on the local disk.
+
+- Minimal setup, does not require an additional storage device.
+
+- Bad performance, only use for testing.
+
+#### direct-lvm
+
+- Stores data on a separate device.
+
+- Requires an additional storage device
+
+- Good performance, use for prooduction
+
+To configure Docker to use the Device Mapper storage driver via the `/etc/docker/daemon.json` configuration file, you need to specify the storage driver in the JSON format within this file. Here's how you can do it:
+
+```bash
+sudo vim /etc/docker/daemon.json
+```
+
+Add the following JSON content to the file
+
+```json
+{
+  "storage-driver": "devicemapper"
+}
+```
+
+Restart the Docker service for the changes to take effect:
+
+```bash
+sudo systemctl restart docker
+```
+
+### Docker Volumes
+
+Docker volumes are a wa to persist data generated by and used by Docker containers. They provide a means for sharing data between containers, as well as between the host machine and containers.
+
+#### Bind mounts vs. Volumes
+
+When mounting external storage to a container, you can use either a bind mount or a volume mount.
+
+##### Bind mounts
+
+- Mount specific path on the host machine to the container.
+
+- Not portable, depends on the host machine's file system and directory structure.
+
+##### Volumes
+
+- Stores data on the host file system, but the storage location is managed by Docker.
+
+- More portable.
+
+- Can mount the same volume to multiple containers.
+
+- Work in more scenarios.
+
+#### Working with Volumes
+
+##### --mount syntax
+
+```bash
+docker run --mount [key=value]...
+```
+
+When you need to connect a location from your host machine directly into your Docker container, you utilize the bind mount mode. Additionally, you can specify the `readonly` parameter to enforce read-only access within the container. In the provided command
+
+```bash
+docker run --mount type=bind,source=/home/private,destination=/private,readonly
+```
+
+Conversely, if you prefer to use Docker-managed volumes for data persistence and sharing among containers, you can employ the volume mount mode. This mode provides greater control and flexibility over data management. Additionally, you can specify the `readonly` parameter to enforce read-only access within the container. In the provided command
+
+```bash
+docker run --mount type=volume,source=private-volume,destination=/private,readonly
+```
+
+##### -v syntax
+
+```bash
+docker run -v <SOURCE>:<DESTINATION>:[OPTIONS]
+```
+
+For bind mounts, you simply specify the source directory on the host machine followed by the destination within the container. For example:
+
+```bash
+docker run -v /home/private:/private
+```
+
+For Docker-managed volumes, you specify the volume name followed by the destination within the container. Additionally, you can include the :ro suffix to enforce read-only access. For instance:
+
+```bash
+docker run -v private-volume:/private:ro
+```
+
+#### Managing with Volumes
+
+Create volume
+
+```bash
+docker volume create <VOLUME_NAME>
+```
+
+List current volumes.
+
+```bash
+docker volume ls
+```
+
+Get detailed information about a volume.
+
+```bash
+docker volume inspect <VOLUME_NAME>
+```
+
+Delete volume.
+
+```bash
+docker volume rm <VOLUME_NAME>
+```
+
+### Image Cleanup
+
+Get information about disk usage on a system.
+
+```bash
+docker system df
+```
+
+Get even more information about disk usage on a system.
+
+```bash
+docker system df -v
+```
+
+Remove dangling images (images not referenced by any tag or container).
+
+```bash
+docker image prune
+```
+
+Remove all unused images (not used by a container).
+
+```bash
+docker image prune -a
+```
+
+### Chapter 5 - Networking
+
+#### Docker Networking
+
+Docker uses an architecture called 'Container Networking Model (CNM)' to manage networking for Docker containers. The CNM utilizes the following concepts:
+
+- **Sandbox**: An isolated unit containing all networking components associated with a single container. Usually a Linux Network namespace.
+
+- **Endpoint**: Connects a sandbox to a network. Each sandbox/container can have any number of endpoints, but has exactly one endpoint for each network it is connected to.
+
+- **Network**: A Collection of endpoints connected to one another.
+
+- **Network Driver**: Handles the actual implementation of the CNM concepts.
+
+- **IPAM Driver**: IPAM means IP Address Management. Automatically allocates subnets and IP addresses for networks and endpoints.
