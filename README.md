@@ -681,76 +681,45 @@ Docker uses an architecture called 'Container Networking Model (CNM)' to manage 
 
 #### Networking Drivers
 
-Docker includes several built0in network drivers, knowns as 'Native Network Drivers'.
- (CNM)
-These network drivers implement the concept descrived in the 'Container Networking Model'.
+Docker includes several built-in network drivers, referred to as 'Native Network Drivers', which implement the 'Container Networking Model (CNM)'. These drivers facilitate different networking configurations for containers. The primary network drivers are:
 
-The 'Native Network Drivers' are host, bridge, overlay, MACVLAN, none. With `docker run`, you can choose a network driver by using `--net=<DRIVER>`
+- **Host**: Connects the container directly to the host's network stack, sharing the host's IP address.
+
+- **Bridge**: Creates a private internal network on the host, where containers connected to the same bridge can communicate.
+
+- **Overlay**: Enables communication between containers across multiple Docker hosts, forming a distributed network.
+
+- **MACVLAN**: Assigns a unique MAC address to each container, making them appear as physical devices on the network.
+
+- **None**: Disables all networking for the container, effectively isolating it.
 
 ##### The Host Network Driver
 
+The Host Network Driver allows containers to utilize the host's network stack directly, sharing the same network namespace as the host. This configuration bypasses the isolation provided by Docker's default bridge network, enabling containers to use the host's IP address and port range. Consequently, no two containers can use the same port simultaneously. This driver simplifies networking setup and improves performance by reducing overhead, making it ideal for scenarios where low-latency communication is crucial and only a few containers are running on a single host. However, it also increases security risks since all containers share the host's network namespace.
+
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/glgscpmrqrlm.png">
-
-The Host Network Driver allows containers to use the host's network stack directly.
-
-- Containers use the host's networking resources directly.
-
-- No sandboxes, all containers on the host using the host driver share the same network namespace.
-
-- No two containers can use the same port(s).
-
-- Simple and easy setup, one or only few containers on a single host.
 
 ##### The Bridge Network Driver
 
+The Bridge Network Driver uses Linux bridge networks to provide connectivity between containers on the same host. This is the default driver for containers not running in a swarm. It creates a Linux bridge for each Docker network and establishes a default bridge network named bridge0. Containers automatically connect to this default bridge if no other network is specified. The bridge network driver offers isolated networking among containers on a single host, making it suitable for standard applications where container-to-container communication is required without exposing them to the host's network directly.
+
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/nfzcchkupzbb.png">
-
-The Bridge Network Driver uses Linux bridge networks to provide connectivity between containers on the same host.
-
-- This is the default driver for containers running on a single host (i.e., not in a swarm).
-
-- Creates a Linux Bridge for each Docker network.
-
-- Creates a default Linux bridge network called `bridge0`. Containers automatically connect to this if no other network is specified.
-
-- Isolated networking among containers on a single host.
 
 ##### The Overlay Network Driver
 
+The Overlay Network Driver facilitates seamless communication between containers across multiple Docker hosts, primarily within Docker swarm environments. It employs a VXLAN data plane, enabling transparent routing of data between hosts within the swarm while abstracting the underlying network infrastructure (underlay) from the containers. This driver automatically sets up network interfaces, bridges, and other necessary components on each host within the swarm, simplifying the networking setup process. It enables effortless networking between containers within a Docker swarm, ensuring they can communicate seamlessly irrespective of their physical host, crucial for distributed applications such as microservices architectures or high availability setups.
+
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/znzxlgsftsnd.png">
-
-The Overlay Network Driver provides connectivity between containers across multiple Docker hosts, i.e. with Docker swarm.
-
-- Uses a VXLAN data plane, which allows the underlying network infrastructure (underlay) to route data between hosts in a way that is transparent to the containers themselves.
-
-- Automatically configures network interfaces, bridges, etc. on each host as needed.
-
-- Networking between containers in a swarm.
 
 ##### The MACVLAN Network Driver
 
+The MACVLAN Network Driver offers a lightweight approach by directly connecting container interfaces to host interfaces. It associates with Linux interfaces directly instead of utilizing a bridge interface, offering less overhead and latency. However, configuration is more complex, and there's a stronger dependency between MACVLAN and the external network. It's ideal for scenarios requiring extremely low latency or containers with IP addresses in the external subnet.
+
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/mnkkmqnzbopk.png">
-
-The MACVLAN Network Driver offers a more lightweight implementation by connecting container interfaces directly to host interfaces.
-
-- Uses direct association with Linux interfaces instead of a bridge interface.
-
-- Harder to confoigure and greater dependency between MACVLAN and external network.
-
-- More lightweight and less latency.
-
-- When there is a need for extremely low latency, or a need for containers with IP addresses in the external subnet.
 
 ##### The None Network Driver
 
+The None Network Driver provides complete isolation for containers without any networking implementation. Containers using this driver are entirely isolated from both other containers and the host. Manual setup is required if networking is desired with the None driver. Although it creates separate networking namespaces for each container, no interfaces or endpoints are established. This driver is suitable when container networking is unnecessary or when custom networking setup is preferred.
+
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/feveisqnojhu.png">
 
-The None Network Driver does not provide any networking implementation.
-
-- Container is completely isolated from other containers and the host.
-
-- If you want networking with the None driver, you must set everything up manually.
-
-- None does create a separate networking namespace for each container, but no interfaces or endpoints.
-
-- When there is no need for container networking or you want to set all of the networking up yourself.
