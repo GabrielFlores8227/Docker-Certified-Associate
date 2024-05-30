@@ -736,13 +736,13 @@ To create and run containers on a custom bridge network, follow these steps:
 Create a custom bridge network using the `docker network create command`, specifying the desired network name.
 
 ```bash
-docker network create <NETWORK_NAME>
+docker network create <NETWORK>
 ```
 
 When running a container, specify the custom bridge network using the `--net` flag along with the name of the network created in the previous step.
 
 ```bash
-docker run --net <NETWORK_NAME> <IMAGE>
+docker run --net <NETWORK> <IMAGE>
 ```
 
 By creating and utilizing a custom bridge network, you gain greater flexibility and control over your container networking environment, allowing you to tailor it to your specific requirements.
@@ -772,13 +772,13 @@ To create and deploy services on a custom overlay network, follow these steps:
 Create a custom overlay network using the `docker network create` command, specifying the `--driver overlay` option and the desired network name.
 
 ```bash
-docker network create --driver overlay <NETWORK_NAME>
+docker network create --driver overlay <NETWORK>
 ```
 
 When deploying a service in the swarm, specify the custom overlay network using the `--net` flag along with the name of the network created in the previous step.
 
 ```bash
-docker service create --name <SERVICE> --net <NETWORK_NAME> <IMAGE>
+docker service create --name <SERVICE> --net <NETWORK> <IMAGE>
 ```
 
 By creating and utilizing a custom overlay network, you gain greater flexibility and control over your service networking within the Docker swarm, allowing you to tailor it to your specific requirements.
@@ -798,13 +798,13 @@ To leverage the MACVLAN driver, follow these steps:
 Create a custom MACVLAN network using the docker network create command, specifying the `--driver macvlan` option and providing additional configuration such as subnet, gateway, parent interface, etc.
 
 ```bash
-docker network create --driver macvlan --subnet=192.168.1.0/24 --gateway=192.168.1.1 -o parent=eth0 <NETWORK_NAME>
+docker network create --driver macvlan --subnet=192.168.1.0/24 --gateway=192.168.1.1 -o parent=eth0 <NETWORK>
 ```
 
 When running a container, specify the custom MACVLAN network using the --network flag along with the name of the network created in the previous step.
 
 ```bash
-docker run --net <NETWORK_NAME> <IMAGE>
+docker run --net <NETWORK> <IMAGE>
 ```
 
 By creating and utilizing a custom MACVLAN network, you gain the ability to integrate containers directly into your existing physical network infrastructure, enabling them to behave like separate physical devices on the network. This is particularly useful for scenarios where containers require direct access to specific network resources or need to communicate directly with other devices on the network.
