@@ -345,7 +345,7 @@ Docker recommends that you distribute your manager nodes across at least 3 avail
 
 ### Introoduction to Docker Services
 
-A Service is used to run an application on Docker Swarm. A service specifies a
+A Service is used to run an application on Docker swarm. A service specifies a
 set of one or more replica tasks. These tasks will be distributed automatically
 across the nodes in the cluster and executed as containers.
 
@@ -661,9 +661,9 @@ Remove all unused images (not used by a container).
 docker image prune -a
 ```
 
-### Chapter 5 - Networking
+## Chapter 5 - Networking
 
-#### Docker Networking
+### Docker Networking
 
 Docker uses an architecture called 'Container Networking Model (CNM)' to manage networking for Docker containers. The CNM utilizes the following concepts:
 
@@ -679,7 +679,7 @@ Docker uses an architecture called 'Container Networking Model (CNM)' to manage 
 
 - **IPAM Driver**: IPAM means IP Address Management. Automatically allocates subnets and IP addresses for networks and endpoints.
 
-#### Networking Drivers
+### Networking Drivers
 
 Docker includes several built-in network drivers, referred to as 'Native Network Drivers', which implement the 'Container Networking Model (CNM)'. These drivers facilitate different networking configurations for containers. The primary network drivers are:
 
@@ -693,25 +693,25 @@ Docker includes several built-in network drivers, referred to as 'Native Network
 
 - **None**: Disables all networking for the container, effectively isolating it.
 
-##### The Host Network Driver
+#### The Host Network Driver
 
 The Host Network Driver allows containers to utilize the host's network stack directly, sharing the same network namespace as the host. This configuration bypasses the isolation provided by Docker's default bridge network, enabling containers to use the host's IP address and port range. Consequently, no two containers can use the same port simultaneously. This driver simplifies networking setup and improves performance by reducing overhead, making it ideal for scenarios where low-latency communication is crucial and only a few containers are running on a single host. However, it also increases security risks since all containers share the host's network namespace.
 
 <img width="600" src="https://github.com/GabrielFlores8227/Docker-Certified-Associate/blob/main/.assets/glgscpmrqrlm.png">
 
-To run a container using the host network driver in Docker, you can specify the network mode as 'host' when running the container. 
+To run a container using the host network driver in Docker, you can specify the network mode as 'host' when running the container.
 
 ```bash
 docker run --net host <IMAGE>
 ```
 
-or 
+or
 
 ```bash
 docker run --network=host <IMAGE>
 ```
 
-##### The Bridge Network Driver
+#### The Bridge Network Driver
 
 The Bridge Network Driver uses Linux bridge networks to provide connectivity between containers on the same host. This is the default driver for containers not running in a swarm. It creates a Linux bridge for each Docker network and establishes a default bridge network named bridge0. Containers automatically connect to this default bridge if no other network is specified. The bridge network driver offers isolated networking among containers on a single host, making it suitable for standard applications where container-to-container communication is required without exposing them to the host's network directly.
 
@@ -747,7 +747,7 @@ docker run --net <NETWORK> <IMAGE>
 
 By creating and utilizing a custom bridge network, you gain greater flexibility and control over your container networking environment, allowing you to tailor it to your specific requirements.
 
-##### The Overlay Network Driver
+#### The Overlay Network Driver
 
 The Overlay Network Driver facilitates seamless communication between containers across multiple Docker hosts, primarily within Docker swarm environments. It employs a VXLAN data plane, enabling transparent routing of data between hosts within the swarm while abstracting the underlying network infrastructure (underlay) from the containers. This driver automatically sets up network interfaces, bridges, and other necessary components on each host within the swarm, simplifying the networking setup process. It enables effortless networking between containers within a Docker swarm, ensuring they can communicate seamlessly irrespective of their physical host, crucial for distributed applications such as microservices architectures or high availability setups.
 
@@ -783,7 +783,7 @@ docker service create --name <SERVICE> --net <NETWORK> <IMAGE>
 
 By creating and utilizing a custom overlay network, you gain greater flexibility and control over your service networking within the Docker swarm, allowing you to tailor it to your specific requirements.
 
-##### The MACVLAN Network Driver
+#### The MACVLAN Network Driver
 
 The MACVLAN Network Driver offers a lightweight approach by directly connecting container interfaces to host interfaces. It associates with Linux interfaces directly instead of utilizing a bridge interface, offering less overhead and latency. However, configuration is more complex, and there's a stronger dependency between MACVLAN and the external network. It's ideal for scenarios requiring extremely low latency or containers with IP addresses in the external subnet.
 
@@ -809,7 +809,7 @@ docker run --net <NETWORK> <IMAGE>
 
 By creating and utilizing a custom MACVLAN network, you gain the ability to integrate containers directly into your existing physical network infrastructure, enabling them to behave like separate physical devices on the network. This is particularly useful for scenarios where containers require direct access to specific network resources or need to communicate directly with other devices on the network.
 
-##### The None Network Driver
+#### The None Network Driver
 
 The None Network Driver provides complete isolation for containers without any networking implementation. Containers using this driver are entirely isolated from both other containers and the host. Manual setup is required if networking is desired with the None driver. Although it creates separate networking namespaces for each container, no interfaces or endpoints are established. This driver is suitable when container networking is unnecessary or when custom networking setup is preferred.
 
@@ -820,3 +820,253 @@ To run a container using the None network driver, you simply specify the `--net 
 ```bash
 docker run --net none <IMAGE>
 ```
+
+### Creating a Bridge Network
+
+You can create and manage your own networks with the `docker network` commands. If you do not
+specify a network driver, bridge will be used.
+
+Create a network.
+
+```bash
+docker network create <NETWORK>
+```
+
+Run a new container, connecting it to the specified network.
+
+```bash
+docker run --network <NETWORK>
+```
+
+Connect a running container to an existing network.
+
+```bash
+docker network connect <NETWORK> <CONTAINER>
+```
+
+#### Embedded DNS
+
+Docker networks implement an embedded DNS server, allowing containers and services to locate and communicate with one another.
+
+Containers can communicate with other containers and services using the service or container name, or network alias.
+
+```bash
+docker run --network-alias <ALIAS> <IMAGE>
+```
+
+Provide a network alias to a container.
+
+```bash
+docker network connect --alias <ALIAS> <IMAGE>
+```
+
+#### Managing Networks
+
+List networks.
+
+```bash
+docker network ls
+```
+
+Inspect network
+
+```bash
+docker network inspect <NETWORK>
+```
+
+Disconnect a running container from an existing network.
+
+```bash
+docker network disconnect <NETWORK> <CONTAINER>
+```
+
+Delete network.
+
+```bash
+docker network rm <NETWORK>
+```
+
+### Deploy a Service on a Docker Overlay Network
+
+You can create a network with the overlay driver to provide connectivity between services and containers in Docker swarm.
+
+By default, services are attached to a default overlay network called ingress. You can create your own networks to provide isolated communication between services and containers.
+
+Create an overlay network.
+
+```bash
+docker network create --driver overlay <NETWORK>
+```
+
+Run a service attached to an existing overlay network.
+
+```bash
+docker service create --network <NETWORK> <IMAGE>
+```
+
+## Chapter 6 - Security
+
+### Signing Images and Enabling Docker Content Trust
+
+Docker Content Trust (DCT) provides aa secure way to verify the integrity of images before you pull or run them on your systems.
+
+With DCT, the image creator signs each image with a certificate, which clients can use to verify the image before running it.
+
+Generate a delegation key pair. This gives users access to sign images for a repository.
+
+```bash
+docker trust key generate <SIGNER_NAME>
+```
+
+Add a signer (user) to a repo.
+
+```bash
+docker trust signer add --key <KEY_FILE> <SIGNER_NAME> <REPO>
+```
+
+Sign an image and pish it to registry.
+
+```bash
+docker trust sign <REPO>:<TAG>
+```
+
+#### Enabling DCT
+
+Docker Content Trust can be enabled by setting the `DOCKER_CONTENT_TRUST` enviroment to 1.
+
+In Docker Enterprise Edition, you can also enable it in `daemon.json`.
+
+When DCT is enabled, Docker will only pull and run signed images. Attempting yo upll and/or run an unsined image will result in an error message.
+
+Note that when `DOCKER_CONTENT_TRUST=1`, `docker push` will automatically sign the image before pushing it.
+
+### Default Docker Engine Security
+
+Namespaces and Control Groups (cgroups) provide isolation to containers.
+
+Isolation means that container processes cannot see or affect other containers or processes running directly on the host system.
+
+This limits the impact of certain exploits or pivilege escalation attacks. If one ccontainer is compromised, it is less likely that it can be used to gain any further access outside the container.
+
+#### Docker Daemon Attack Surface
+
+It is important to note that the Docker daemon itself requires root privileges. Therefore, you should be aware that of the potential attack surface presented by the Docker daemon.
+
+Only allow trusted users to access the daemon. Control of the Docker daemon could allow the entire host to be compromised.
+
+Be aware of this you are building any automation that accesses the Docker daemon, or grating any userrs direct access to it.
+
+#### Linux Kernel Capabilities
+
+Docker uses capabilities to fine-tune what container processes can access.
+
+This means that a process can run as root inside a container, but does not have access to do everything root could normally do on the host.
+
+For example, Docker uses the `net_bind_service` capability to allow container processes to bind to a port below 1024 without running as root.
+
+### Docker MTLS
+
+Docker swarm provides additional security by encrypting communication between various components in the cluster.
+
+Mutually Authenticated Transport Layer Security (MTLS)
+
+- Both participants in communication exchanges certificated and all communication is authenticated and ecrypted.
+
+- When a swarm is initialized, a root certificate authority (CA) is created, which is used to generate certificates for all nodes as they join the cluster.
+
+- Worker and manager tokens are generated using the CA and are used to join new nodes to the cluster.
+
+- Used for all cluster-level communication between swarm nodes.
+
+- Enabled by default, you don't need to doo anything to set it up.
+
+#### Encrypt Overlay Networks
+
+You can encrypt communication between containers on overlay networks in order to provide greater security within your swarm cluster.
+
+Use the `--opt encrypted` flag when creating an overlay network to encrypt it.
+
+```bash
+docker network create --opt encrypted --driver overlay <NETWORK>
+```
+
+## Chapter 7 - Docker Enterprise
+
+### Universal Control Plane
+
+Docker Universal Control Plane (UCP) is a robust enterprise-level cluster management solution that extends beyond the basic functionalities of Docker Swarm.
+
+While UCP might initially appear to be just "Docker Swarm with a web interface," it offers a comprehensive suite of advanced features, including:
+
+- **Organization and Team Management**: Efficiently manage user groups and streamline collaboration within your organization.
+
+- **Role-Based Access Control (RBAC)**: Implement fine-grained access controls to ensure that users have the appropriate permissions for their roles, enhancing security and compliance.
+
+- **Multi-Orchestrator Support**: Seamlessly orchestrate containers with both Docker Swarm and Kubernetes, giving you the flexibility to choose the best tool for your needs.
+
+These capabilities make UCP a powerful tool for managing complex containerized environments in an enterprise setting.'
+
+### Universal Control Plane (UCP)
+
+Docker Universal Control Plane (UCP) is a robust enterprise-level cluster management solution that extends beyond the basic functionalities of Docker Swarm.
+
+While UCP might initially appear to be just "Docker Swarm with a web interface," it offers a comprehensive suite of advanced features, including:
+
+- **Organization and Team Management:** Efficiently manage user groups and streamline collaboration within your organization.
+- **Role-Based Access Control (RBAC):** Implement fine-grained access controls to ensure that users have the appropriate permissions for their roles, enhancing security and compliance.
+- **Multi-Orchestrator Support:** Seamlessly orchestrate containers with both Docker Swarm and Kubernetes, giving you the flexibility to choose the best tool for your needs.
+
+These capabilities make UCP a powerful tool for managing complex containerized environments in an enterprise setting.
+
+#### UCP Security
+
+Docker Universal Control Plane (UCP) offers a flexible and robust model for managing access to cluster resources and functionality. Here’s an overview of the key components in UCP's security architecture:
+
+- **User:** An authenticated individual who can access the system.
+
+- **Team:** A group of users that share specific permissions.
+
+- **Organization:** A collection of teams that share certain permissions.
+
+- **Service Account:** A Kubernetes object that enables a container to access cluster resources.
+
+- **Subject:** An entity (user, team, organization, or service account) with the capability to perform actions within the cluster.
+- **Resource Set:** A collection of Docker Swarm objects, including containers, services, and nodes.
+
+- **Role:** A set of permissions that allows operations on objects within a resource set.
+
+- **Grant:** The assignment of a specific role to a subject concerning a resource set.
+
+Additionally, UCP supports LDAP integration, enabling streamlined management of users and teams through an LDAP-enabled user directory. This integration enhances security by centralizing user authentication and access control.
+
+### Docker Enterprise Edition (DEE) Trusted Registry
+
+Docker Enterprise Edition (DEE) Trusted Registry (DTR) is a secure, scalable, and robust solution for storing and managing Docker images within your enterprise. DTR provides several advanced features that make it an essential tool for managing containerized applications at scale.
+
+#### Key Features of DTR
+
+- **Security and Access Control:** DTR allows you to define detailed access control policies, ensuring that only authorized users can access specific images.
+
+- **Image Scanning:** Automatically scan images for vulnerabilities, ensuring that only secure images are deployed in your environment.
+
+- **Content Trust:** Use digital signatures to verify the authenticity and integrity of Docker images.
+
+- **Automated Image Promotion:** Define policies to automatically promote images through different stages of your CI/CD pipeline based on predefined criteria.
+
+- **High Availability:** DTR can be deployed in a highly available configuration to ensure that your registry is always accessible.
+
+- **LDAP Integration:** Integrate with LDAP for centralized user management and authentication.
+
+#### DTR Security
+
+DTR incorporates several features to enhance the security of your Docker images and registry operations:
+
+- **Role-Based Access Control (RBAC):** Implement fine-grained access controls, assigning specific permissions to users, teams, and organizations.
+
+- **Image Scanning and Vulnerability Detection:** Regularly scan images to detect vulnerabilities and ensure compliance with security policies.
+
+- **Notary Integration for Content Trust:** Leverage Docker Content Trust to sign and verify images, ensuring their authenticity and integrity.
+
+- **Audit Logs:** Maintain detailed logs of all actions performed in the registry for auditing and compliance purposes.
+
+By using DEE Trusted Registry, organizations can ensure that their container images are securely stored, managed, and deployed, reducing the risk of security breaches and enhancing operational efficiency.
