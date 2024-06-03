@@ -244,6 +244,30 @@ You can take some basic steps to secure your registry:
 - Use TLS with a certificate.
 - Require user authentication.
 
+### Using Docker Registries
+
+Download an image from a registry to the local system.
+
+```bash
+docker pull <IMAGE>
+```
+
+Authenticate with a remote registry. When working with Docker registries, if the registry url is not specified, the default registry url will be used (Docker Hub).
+
+```bash
+docker login <REGISTRY_URL>
+```
+
+To push and pull images from your private registry, tag the images with the registyry hostname (and optionally, port).
+
+```bash
+docker pull <REGISTRY_URL>:<PORT>/<IMAGE>
+```
+
+```bash
+docker push  <REGISTRY_URL>:<PORT>/<IMAGE>
+```
+
 ## Chapter 3 - Orchestration
 
 ### Docker Swarm
