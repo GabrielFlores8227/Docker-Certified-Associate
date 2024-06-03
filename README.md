@@ -187,13 +187,19 @@ with many layers and flatten them into a single layer.
 Docker does not provide an official method for doing this, but you can accomplish it by doing the
 following:
 
+First you need to start the container.
+
 ```bash
 docker run --name <CONTAINER_NAME> <IMAGE>
 ```
 
+Here, the container is exported into a TAR archive file named <CONTAINER_NAME>.tar. This file will contain the file system of the container.
+
 ```bash
 docker export <CONTAINER_NAME> > <CONTAINER_NAME>.tar
 ```
+
+Using cat, the content of the TAR archive is piped into docker import, which creates a new Docker image tagged as flat:latest. This new image effectively represents the original container's file system flattened into a single layer.
 
 ```bash
 cat <CONTAINER_NAME>.tar | docker import - flat:latest
