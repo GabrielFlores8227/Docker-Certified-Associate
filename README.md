@@ -268,6 +268,26 @@ docker pull <REGISTRY_URL>:<PORT>/<IMAGE>
 docker push  <REGISTRY_URL>:<PORT>/<IMAGE>
 ```
 
+#### Untrusted Certificate
+
+When you're trying to log in to a Docker registry and encounter an error due to an untrusted certificate, it usually means that Docker cannot verify the authenticity of the registry server because the certificate presented by the server is not recognized or trusted by Docker. This often happens when the certificate is self-signed or issued by an authority that Docker doesn't recognize by default.
+
+To resolve this issue, you typically need to add the certificate authority (CA) that issued the registry's certificate to Docker's list of trusted CAs. You can do this by configuring Docker to trust the CA by adding it to the insecure-registries or registry-mirrors section in the `/etc/docker/daemon.json` file.
+
+```json
+{
+  "insecure-registries": ["your.registry.example.com"]
+}
+```
+
+Restart the Docker service to apply the changes:
+
+```bash
+systemctl restart docker
+```
+
+After making these changes, Docker should trust the registry's certificate, and you should be able to log in without encountering certificate errors. However, keep in mind that adding insecure registries may pose security risks, as communication with these registries is not encrypted. Only use this approach with registries you trust and when encryption is not a concern.
+
 ## Chapter 3 - Orchestration
 
 ### Docker Swarm
