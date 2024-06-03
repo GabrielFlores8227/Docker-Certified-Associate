@@ -118,6 +118,11 @@ COPY --from=compiler /compiler/helloworld ./
 # Define the command to run the executable when the container starts
 CMD ["./helloworld"]
 ```
+Once you have a Dockerfile, you are ready to build your image
+
+```bash
+docker build -t <TAG> .
+```
 
 ### Managing Images
 
