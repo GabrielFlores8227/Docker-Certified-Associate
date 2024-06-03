@@ -5,7 +5,7 @@
 Namespaces are Linux technologies that allows processes to be isolated in terms of the resources that they see. They
 can be used to prevent different processes from interfering or interacting with one another.
 
-Docker uses namespaces to isolate containers. This technology allows containers to operate independently. and securely.
+Docker uses namespaces to isolate containers. This technology allows containers to operate independently and securely.
 
 Docker uses namespaces as the following to isolate resources for containers:
 
