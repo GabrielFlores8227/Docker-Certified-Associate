@@ -235,6 +235,15 @@ Set the enviroment variable:
 docker run -d -p 5000:5000 --restart=always --name registry -e REGISTRY_LOG_LEVEL=debug registry:2
 ```
 
+#### Securing a Registry
+
+By default, the registry is completely unsecured. It does not use TLS and does not require authentication.
+
+You can take some basic steps to secure your registry:
+
+- Use TLS with a certificate.
+- Require user authentication.
+
 ## Chapter 3 - Orchestration
 
 ### Docker Swarm
