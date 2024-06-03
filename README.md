@@ -218,6 +218,23 @@ To create a basic registry, simply run a container using registry image and publ
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 ```
 
+You can override individual values in the default registry configuration by supplying enviroment variables with `docker run -e`.
+
+Name the variable REGISTRY_ followed by each configuration key, all uppercase and separated by underscores.
+
+For example, to change the config:
+
+```yaml
+log:
+  level: info
+```
+
+Set the enviroment variable:
+
+```bash
+docker run -d -p 5000:5000 --restart=always --name registry -e REGISTRY_LOG_LEVEL=debug registry:2
+```
+
 ## Chapter 3 - Orchestration
 
 ### Docker Swarm
