@@ -20,7 +20,19 @@ Docker uses namespaces as the following to isolate resources for containers:
 
 Docker Engine on Linux also relies on another technology called control groups (cgroups). A cgroup limits an application
 to a specific set of resources. Control groups allow Docker Engine to share available hardware resources to containers and
-optionally enforce limits and constraints. For example, you can limit the memory available to a specific container.
+optionally enforce limits and constraints. For example, you can limit the memory available to a specific container. The types or resources managed by cgroups are:
+
+- `CPU`: Controls CPU time allocation for processes.
+- `Memory`: Limits the amount of memory processes can use.
+- `Block I/O`: Manages and limits disk I/O.
+- `Network`: Controls network bandwidth.
+- `Devices`: Restricts access to device nodes.
+- `Freezer`: Pauses and resumes execution of processes.
+- `PIDs`: Limits the number of processes that can be created.
+
+### Namespaces vs. Control Groups
+
+Namespaces create isolated instances of system resources like process IDs and network interfaces, allowing containers to operate independently. Meanwhile, cgroups allocate and regulate system resources such as CPU, memory, and I/O, ensuring equitable distribution among containerized processes. In essence, namespaces provide isolation, while cgroups enforce resource constraints, collectively facilitating robust containerization with secure and efficient resource utilization.
 
 ## Chapter 2 - Image Creation, Management, and Registry
 
