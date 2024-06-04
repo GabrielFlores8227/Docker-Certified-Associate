@@ -562,6 +562,76 @@ Use the `--format` flag to retrieve a specific subsection of the data using a Go
 docker service inspect --format '{{.ID}}' <SERVICE>
 ```
 
+### Docker Compose
+
+Docker Compose is a tool for defining and running multi-container applications. It is the key to unlocking a streamlined and efficient development and deployment experience.
+
+Compose simplifies the control of your entire application stack, making it easy to manage services, networks, and volumes in a single, comprehensible YAML configuration file. Then, with a single command, you create and start all the services from your configuration file.
+
+Compose works in all enviroments; production, staging, development, testing, as well as CI workflows. It also has commands for managing the whole lifecycle of your application:
+
+- Start, stop, and rebuild services.
+- View the status of running services.
+- Stream the log output of running services.
+- Run a one-off command on a service.
+
+#### Setting up a new Docker Compose
+
+Make a directory to contain your Docker Compose project.
+
+```bash
+mkdir my-docker-project
+cd my-docker-project
+```
+
+Add a `docker-compose.yml` file to the directory and define your application within it. Here's an example:
+
+```yaml
+version: '3.8'
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+
+  app:
+    image: myapp:latest
+    build:
+      context: ./app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: exampledb
+```
+
+Create and run the resources defined in `docker-compose.yml`. The `-d` flag runs the application in detached mode.
+
+```bash
+docker-compose up -d
+```
+
+Display the containers/services currently running under Docker Compose.
+
+```bash
+docker-compose ps
+```
+
+Stop and remove all resources that were created using `docker-compose up`.
+
+```bash
+docker-compose down
+```
+
 ## Chapter 4 - Storage and Volumes
 
 ### Docker Storage in Depth
