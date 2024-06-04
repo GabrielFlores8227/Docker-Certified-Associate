@@ -443,7 +443,7 @@ set of one or more replica tasks. These tasks will be distributed automatically
 across the nodes in the cluster and executed as containers.
 
 ```bash
-docker service create [OPTIONS] <IMAGE> [ARGS]
+docker service create <IMAGE>
 ```
 
 - `--replica`: Specify the number of replica tasks to create for the service.
@@ -476,7 +476,7 @@ docker service inspect <SERVICE>
 Make changes to a service:
 
 ```bash
-docker service update [OPTIONS] <SERVICE>
+docker service update <SERVICE>
 ```
 
 Delete an existing service:
