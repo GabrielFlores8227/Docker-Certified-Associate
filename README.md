@@ -500,7 +500,7 @@ The following flags accept templates:
 This command sets an enviroment variable for each container that contains the hostname of the node that container is running on:
 
 ```bash
-docker service create --env NODE_HOSTNAME="{{.Node.Hostname}}" nginx
+docker service create --env NODE_HOSTNAME="{{.Node.Hostname}}" <IMAGE>
 ```
 
 #### Replicated Services vs. Global Services
@@ -508,13 +508,13 @@ docker service create --env NODE_HOSTNAME="{{.Node.Hostname}}" nginx
 Replicated Services run the requests number of replica tasks across the swarm cluster.
 
 ```bash
-docker service create --replicas 3 nginx
+docker service create --replicas 3 <IMAGE>
 ```
 
 Global Services runn one task on each node in the cluster.
 
 ```bash
-docker service create --mode global nginx
+docker service create --mode global <IMAGE>
 ```
 
 #### Scaling Services
