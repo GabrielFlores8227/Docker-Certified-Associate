@@ -436,7 +436,7 @@ Docker recommends that you distribute your manager nodes across at least 3 avail
 | 7             | 3-2-2           |
 | 9             | 3-3-3           |
 
-### Introoduction to Docker Services
+### Introduction to Docker Services
 
 A Service is used to run an application on Docker swarm. A service specifies a
 set of one or more replica tasks. These tasks will be distributed automatically
