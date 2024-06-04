@@ -723,6 +723,48 @@ Remove the stack and all its associated services.
 docker stack rm <STACK>
 ```
 
+### Node Labels
+
+Enhance the functionality of your swarm nodes by incorporating metadata through node labels. These labels enable precise control over task allocation based on specified criteria.
+
+For instance, in a setup where nodes span across multiple datacenters or availability zones, leveraging node labels allows you to designate the geographical location of each node. Consequently, you can strategically execute tasks within specific zones or evenly distribute them across zones, optimizing workload management and resource utilization for greater efficiency.
+
+Add a label to a node.
+
+```bash
+docker node update --label-add <LABEL>=<VALUE> <NODE>
+```
+
+You can view existing node labels with:
+
+```bash
+docker node inspect --pretty <NODE>
+```
+
+To run a service's tasks only on nodes with a specific label value, use the `--constraint` flag with `docker service create`.
+
+```bash
+docker service create --constraint node.labels.<LABEL>==<VALUE> <IMAGE>
+```
+
+You can also use a constraint to run only on nodes without a particular value.
+
+```bash
+docker service create --constraint node.labels.<LABEL>!=<VALUE> <IMAGE>
+```
+
+You can also use the `--constraint` flag multiple times to list multiple constraints. All constraints must be satisfied for tasks to run on a node.
+
+#### Placement-pref
+
+Use `--placement-pref` with the spread strategy to spread tasks evenly across all values of a particular label.
+
+```bash
+docker service create --placement-pref spread=node.labels.<LABEL> <IMAGE>
+```
+
+For example, if you have a label called 'availability_zone' with three values (east, west, and south), the tasks will be divided evenly among the node groups with each of those three values, no matter how many nodes are in each group.
+
 ## Chapter 4 - Storage and Volumes
 
 ### Docker Storage in Depth
