@@ -530,7 +530,7 @@ docker service update --replicas <REPLICAS> <SERVICE>
 Use docker service scale syntax.
 
 ```bash
-docker service scale <SERVICE>=<SERVICE>
+docker service scale <SERVICE>=<REPLICAS>
 ```
 
 ### Using docker inspect
@@ -769,35 +769,19 @@ For example, if you have a label called 'availability_zone' with three values (e
 
 ### Docker Storage in Depth
 
-Storage drivers are sometims known as Graph drivers. The proper storage driver to use often depends ib your operating system and other local configuration factors.
+Persistent data in Docker can be managed using several storage models, each with its own advantages and trade-offs. Understanding these models is crucial for optimizing your container's performance and data management.
 
-- `overlay2`: Current Ubuntu and CentOS/RHEL versions.
+- **Filesystem Storage**: Involves storing data in a hierarchical file system format. This model is used by drivers such as Overlay2 and Aufs. One of the primary benefits of filesystem storage is its efficient use of memory. It simplifies file management and access, making it a good choice for applications where read operations are predominant. However, it can be less efficient with write-heavy workloads due to the overhead associated with managing files and directories. For instance, applications that perform numerous small writes can experience performance bottlenecks.
 
-- `aufs`: Ubuntu 14.04 and older.
+- **Block Storage**: Stores data in fixed-size blocks. This model is employed by the Devicemapper driver. Block storage shines in environments where write-heavy workloads are common, providing better performance for applications that require frequent write operations. The block storage approach allows for more granular control over data management, reducing the overhead that typically hampers filesystem storage in write-intensive scenarios. However, it can be more complex to manage and might consume more memory. This makes block storage an excellent choice for database applications or other systems where maintaining high performance during extensive write operations is crucial.
 
-- `devicemapper`: CentOS 7 and earlier.
+Understanding Docker storage is crucial for optimizing container performance and managing data effectively. Storage drivers, sometimes known as graph drivers, are responsible for how Docker manages and stores data. The appropriate storage driver depends on your operating system and specific configuration requirements.
 
-#### Storage models
+- **overlay2**: Recommended driver for modern Ubuntu and CentOS/RHEL distributions. It is favored for its efficient memory usage and faster performance. Overlay2 supports multiple lower layers, which enhances its scalability and makes it a robust choice for contemporary systems.
 
-Persistent data can be managed using several storage models.
-
-##### Filesystem storage
-
-- Data is stored in the form of a file system.
-
-- Used by `overlay2` and `aufs`.
-
-- Efficient use of memory.
-
-- Inefficient with write-heavy workloads.
-
-##### Block storage
-
-- Stores data in blocks.
-
-- Used by `devicemapper`.
-
-- Efficient with write-heavy workloads.
+- **aufs**: Suitable for older Ubuntu versions, such as Ubuntu 14.04 and earlier. Despite its age, Aufs offers advanced features like the creation of multiple layers and allows efficient container creation. These features were pioneering for their time and still provide value in legacy systems.
+  
+- **devicemapper**: Used in older CentOS versions, like CentOS 7 and earlier. It excels in providing efficient block-level storage, which makes it ideal for environments with heavy write workloads. Its design caters to scenarios where write operations are frequent and require robust performance.
 
 ### Configuring DeviceMapper
 
@@ -807,21 +791,9 @@ You can customize your DeviceMapper configuration using the daemon config file.
 
 DeviceMapper supports two modes:
 
-#### loop-vm mode
+- **Loopback Mechanism (loop-vm mode)**: The loopback mechanism simulates an additional physical disk using files on the local disk. This method requires minimal setup and does not need an additional storage device. However, it offers poor performance and is generally only suitable for testing purposes.
 
-- Loopback mechanism simulates an additional physical disk using files on the local disk.
-
-- Minimal setup, does not require an additional storage device.
-
-- Bad performance, only use for testing.
-
-#### direct-lvm
-
-- Stores data on a separate device.
-
-- Requires an additional storage device
-
-- Good performance, use for prooduction
+- **Direct-lvm Mode**: The direct-lvm mode stores data on a separate device, necessitating the use of an additional storage device. This configuration provides good performance, making it suitable for production environments.
 
 To configure Docker to use the Device Mapper storage driver via the `/etc/docker/daemon.json` configuration file, you need to specify the storage driver in the JSON format within this file. Here's how you can do it:
 
@@ -829,11 +801,23 @@ To configure Docker to use the Device Mapper storage driver via the `/etc/docker
 sudo vim /etc/docker/daemon.json
 ```
 
-Add the following JSON content to the file
+Add the following JSON content to the file.
 
 ```json
 {
   "storage-driver": "devicemapper"
+}
+```
+
+Loopback Mechanism is the default mode for devicemapper, but if you need to use Direct-lvm, you can add the following properties to the file.
+
+```json
+{
+  "storage-driver": "devicemapper",
+  "storage-options": [
+    "dm.directlvm_device=/dev/xvdb",
+    "dm.directlvm_device_force=true"
+  ]
 }
 ```
 
