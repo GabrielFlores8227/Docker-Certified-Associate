@@ -524,13 +524,13 @@ Scaling Services means changing the number of replica tasks. There are two ways 
 Update the service with a new number of replicas.
 
 ```bash
-docker service update --replicas REPLICAS SERVICE
+docker service update --replicas <REPLICAS> <SERVICE>
 ```
 
 Use docker service scale
 
 ```bash
-docker service scale SERVICE=REPLICAS
+docker service scale <SERVICE>=<SERVICE>
 ```
 
 ### Using docker inspect
