@@ -575,7 +575,7 @@ Compose works in all enviroments; production, staging, development, testing, as 
 - Stream the log output of running services.
 - Run a one-off command on a service.
 
-#### Setting up a new Docker Compose
+#### Setting up Docker Compose
 
 Make a directory to contain your Docker Compose project.
 
@@ -630,6 +630,97 @@ Stop and remove all resources that were created using `docker-compose up`.
 
 ```bash
 docker-compose down
+```
+
+### Docker Stacks
+
+Services are capable of running a single, replicated application across nodes in the cluster, but what if you need to deploy a more complex application consisting of multiple services?
+
+A Stack is a collection of interrelated services that can be deployed and scaled as a unit.
+
+Docker Stacks are similar to the multi-container applications created using Docker Compose. However, they can be scaled and executed across the swarm just like normal swarm services.
+
+#### Setting up Docker Stacks
+
+Initialize a Docker Swarm if not already done.
+
+```bash
+docker swarm init
+```
+
+Docker Stacks uses the same docker-compose.yml file format, but with added features for Swarm mode. Here's an example:
+
+```yaml
+version: '3.8'
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+
+  app:
+    image: myapp:latest
+    build:
+      context: ./app
+    ports:
+      - "3000:3000"
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: any
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: exampledb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  db-data:
+```
+
+Deploy the stack using the docker stack deploy command.
+
+```bash
+docker stack deploy -c docker-compose.yml <STACK>
+```
+
+View the stacks deployed in the Swarm.
+
+```bash
+docker stack ls
+```
+
+Display the services running in a specific stack.
+
+```bash
+docker stack services <STACK>
+```
+
+Remove the stack and all its associated services.
+
+```bash
+docker stack rm <STACK>
 ```
 
 ## Chapter 4 - Storage and Volumes
