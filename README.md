@@ -527,7 +527,7 @@ Update the service with a new number of replicas.
 docker service update --replicas <REPLICAS> <SERVICE>
 ```
 
-Use docker service scale
+Use docker service scale syntax.
 
 ```bash
 docker service scale <SERVICE>=<SERVICE>
