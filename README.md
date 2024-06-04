@@ -511,7 +511,7 @@ Replicated Services run the requests number of replica tasks across the swarm cl
 docker service create --replicas 3 <IMAGE>
 ```
 
-Global Services runn one task on each node in the cluster.
+Global Services run one task on each node in the cluster.
 
 ```bash
 docker service create --mode global <IMAGE>
