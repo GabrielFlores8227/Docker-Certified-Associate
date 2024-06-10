@@ -1,4 +1,4 @@
-## Chapter 1 - Introduction
+## 1. Introduction
 
 ### Namespaces
 
@@ -34,7 +34,7 @@ optionally enforce limits and constraints. For example, you can limit the memory
 
 Namespaces create isolated instances of system resources like process IDs and network interfaces, allowing containers to operate independently. Meanwhile, cgroups allocate and regulate system resources such as CPU, memory, and I/O, ensuring equitable distribution among containerized processes. In essence, namespaces provide isolation, while cgroups enforce resource constraints, collectively facilitating robust containerization with secure and efficient resource utilization.
 
-## Chapter 2 - Image Creation, Management, and Registry
+## 2. Image Creation, Management, and Registry
 
 ### Docker Images
 
@@ -288,7 +288,7 @@ systemctl restart docker
 
 After making these changes, Docker should trust the registry's certificate, and you should be able to log in without encountering certificate errors. However, keep in mind that adding insecure registries may pose security risks, as communication with these registries is not encrypted. Only use this approach with registries you trust and when encryption is not a concern.
 
-## Chapter 3 - Orchestration
+## 3. Orchestration
 
 ### Docker Swarm
 
@@ -765,7 +765,7 @@ docker service create --placement-pref spread=node.labels.<LABEL> <IMAGE>
 
 For example, if you have a label called 'availability_zone' with three values (east, west, and south), the tasks will be divided evenly among the node groups with each of those three values, no matter how many nodes are in each group.
 
-## Chapter 4 - Storage and Volumes
+## 4. Storage and Volumes
 
 ### Docker Storage in Depth
 
@@ -941,7 +941,7 @@ Remove all unused images (not used by a container).
 docker image prune -a
 ```
 
-## Chapter 5 - Networking
+## 5. Networking
 
 ### Docker Networking
 
@@ -1184,7 +1184,7 @@ Run a service attached to an existing overlay network.
 docker service create --network <NETWORK> <IMAGE>
 ```
 
-## Chapter 6 - Security
+## 6. Security
 
 ### Signing Images and Enabling Docker Content Trust
 
@@ -1270,7 +1270,7 @@ Use the `--opt encrypted` flag when creating an overlay network to encrypt it.
 docker network create --opt encrypted --driver overlay <NETWORK>
 ```
 
-## Chapter 7 - Docker Enterprise
+## 7. Docker Enterprise
 
 ### Universal Control Plane
 
