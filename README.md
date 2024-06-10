@@ -1055,7 +1055,7 @@ Create a custom overlay network using the `docker network create` command, speci
 docker network create --driver overlay <NETWORK>
 ```
 
-When deploying a service in the swarm, specify the custom overlay network using the `--net` flag along with the name of the network created in the previous step.
+When deploying a service in the swarm, specify the custom overlay network using the `--network` flag along with the name of the network created in the previous step.
 
 ```bash
 docker service create --name <SERVICE> --network <NETWORK> <IMAGE>
