@@ -1115,7 +1115,7 @@ docker network create <NETWORK>
 Run a new container, connecting it to the specified network.
 
 ```bash
-docker run --network <NETWORK>
+docker run --network <NETWORK> <IMAGE>
 ```
 
 Connect a running container to an existing network.
