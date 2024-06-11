@@ -1137,7 +1137,7 @@ docker run --network-alias <ALIAS> <IMAGE>
 Provide a network alias to a container.
 
 ```bash
-docker network connect --alias <ALIAS> <IMAGE>
+docker network connect --alias <ALIAS> <CONTAINER>
 ```
 
 #### Managing Networks
