@@ -873,7 +873,7 @@ For Docker-managed volumes, you specify the volume name followed by the destinat
 docker run -v private-volume:/private:ro
 ```
 
-#### Managing with Volumes
+#### Managing Volumes
 
 Create volume.
 
