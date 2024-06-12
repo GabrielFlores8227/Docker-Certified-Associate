@@ -1200,7 +1200,7 @@ Docker Content Trust can be enabled by setting the `DOCKER_CONTENT_TRUST` enviro
 
 In Docker Enterprise Edition, you can also enable it in `daemon.json`.
 
-When DCT is enabled, Docker will only pull and run signed images. Attempting yo upll and/or run an unsined image will result in an error message.
+When DCT is enabled, Docker will only pull and run signed images. Attempting to pull and/or run an unsined image will result in an error message.
 
 Note that when `DOCKER_CONTENT_TRUST=1`, `docker push` will automatically sign the image before pushing it.
 
