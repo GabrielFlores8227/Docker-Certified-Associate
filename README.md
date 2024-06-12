@@ -1242,7 +1242,7 @@ Mutually Authenticated Transport Layer Security (MTLS)
 
 - Used for all cluster-level communication between swarm nodes.
 
-- Enabled by default, you don't need to doo anything to set it up.
+- Enabled by default, you don't need to do anything to set it up.
 
 #### Encrypt Overlay Networks
 
