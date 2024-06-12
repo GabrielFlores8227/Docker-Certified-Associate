@@ -825,7 +825,7 @@ Loopback Mechanism is the default mode for devicemapper, but if you need to use 
 }
 ```
 
-Restart the Docker service for the changes to take effect:
+Restart the Docker service for the changes to take effect.
 
 ```bash
 sudo systemctl restart docker
