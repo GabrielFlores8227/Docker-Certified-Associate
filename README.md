@@ -1172,7 +1172,7 @@ docker service create --network <NETWORK> <IMAGE>
 
 ### Signing Images and Enabling Docker Content Trust
 
-Docker Content Trust (DCT) provides aa secure way to verify the integrity of images before you pull or run them on your systems.
+Docker Content Trust (DCT) provides a secure way to verify the integrity of images before you pull or run them on your systems.
 
 With DCT, the image creator signs each image with a certificate, which clients can use to verify the image before running it.
 
@@ -1188,7 +1188,7 @@ Add a signer (user) to a repo.
 docker trust signer add --key <KEY_FILE> <SIGNER_NAME> <REPO>
 ```
 
-Sign an image and pish it to registry.
+Sign an image and push it to your registry.
 
 ```bash
 docker trust sign <REPO>:<TAG>
