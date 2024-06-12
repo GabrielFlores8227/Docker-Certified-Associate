@@ -813,9 +813,13 @@ Loopback Mechanism is the default mode for devicemapper, but if you need to use 
 
 ```json
 {
-  "storage-driver": "devicemapper",
-  "storage-options": [
-    "dm.directlvm_device=/dev/xvdb",
+"storage-driver": "devicemapper",
+"storage-opts": [
+    "dm.directlvm_device=/dev/nvme1n1",
+    "dm.thinp_percent=95",
+    "dm.thinp_metapercent=1",
+    "dm.thinp_autoextend_threshold=80",
+    "dm.thinp_autoextend_percent=20",
     "dm.directlvm_device_force=true"
   ]
 }
