@@ -52,7 +52,7 @@ results in:
 
 - Faster image build.
 
-### Dockerfiles
+### Dockerfile
 
 If you want to create your own images. you can do so with a Dockerfile. A Dockerfile is a set of instructions
 which are used to construct a Docker image. These instructions are called directives.
