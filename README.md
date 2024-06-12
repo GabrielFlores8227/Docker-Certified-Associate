@@ -1218,7 +1218,7 @@ It is important to note that the Docker daemon itself requires root privileges. 
 
 Only allow trusted users to access the daemon. Control of the Docker daemon could allow the entire host to be compromised.
 
-Be aware of this you are building any automation that accesses the Docker daemon, or grating any userrs direct access to it.
+Be aware of this you are building any automation that accesses the Docker daemon, or grating any users direct access to it.
 
 #### Linux Kernel Capabilities
 
