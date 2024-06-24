@@ -1253,3 +1253,9 @@ Use the `--opt encrypted` flag when creating an overlay network to encrypt it.
 ```bash
 docker network create --opt encrypted --driver overlay <NETWORK>
 ```
+
+### Docker Enterprise
+
+Docker Enterprise Edition (Docker EE) provides comprehensive solutions for enterprise container management, featuring several key components such as the Universal Control Plane (UCP), Docker Trusted Registry (DTR), vulnerability scanning, and federated application management.
+
+
