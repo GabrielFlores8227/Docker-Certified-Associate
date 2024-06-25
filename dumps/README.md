@@ -50,4 +50,4 @@ Here, the `ADD https://example.com/file.zip /app/` will download `file.zip` from
 
 SELinux is a security architecture for Linux systems that allows administrators to have more control over who can access the system. It enforces mandatory access controls that can restrict what processes can and cannot do, based on defined policies.
 
-SELinux coild be blocking this operation because it imposes strict access controls that can prevent Docker containers from performing certain privileged operations, such as setting the system time. Even if the container is running with elevated privileges, SELinux policies might still restrict the ability to change the system time from within the container.
+SELinux could be blocking this operation because it imposes strict access controls that can prevent Docker containers from performing certain privileged operations, such as setting the system time. Even if the container is running with elevated privileges, SELinux policies might still restrict the ability to change the system time from within the container.
