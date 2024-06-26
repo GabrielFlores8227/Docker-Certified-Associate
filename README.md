@@ -1254,11 +1254,11 @@ Use the `--opt encrypted` flag when creating an overlay network to encrypt it.
 docker network create --opt encrypted --driver overlay <NETWORK>
 ```
 
-### Docker Enterprise
+## Docker Enterprise
 
 Docker Enterprise Edition (Docker EE) provides comprehensive solutions for enterprise container management, featuring several key components such as the Universal Control Plane (UCP), Docker Trusted Registry (DTR), vulnerability scanning, and federated application management.
 
-#### Universal Control Plane (UCP)
+### Universal Control Plane (UCP)
 
 Docker Universal Control Plane (UCP) offers robust enterprise-level cluster management capabilities.
 
@@ -1270,7 +1270,7 @@ Initially resembling "Docker Swarm with a web interface", UCP distinguishes itse
   
 - **Orchestration Across Platforms**: Supports orchestration with both Docker Swarm and Kubernetes, offering flexibility in workload management.
 
-##### UCP Security
+#### UCP Security
 
 UCP implements a flexible security model that governs access to cluster resources and functionalities:
 
@@ -1290,7 +1290,7 @@ UCP implements a flexible security model that governs access to cluster resource
 
 - **Grant**: The act of assigning a specific permission (role) to a subject within the context of a resource set. Grants enable administrators to enforce security policies effectively, ensuring that only authorized entities can perform designated actions on cluster resources.
 
-#### Docker Trusted Registry (DTR) 
+### Docker Trusted Registry (DTR) 
 
 Docker Trusted Registry (DTR) is a commercial enterprise-grade image storage solution from Docker, Inc. It provides secure image management and distribution capabilities within Docker's ecosystem. DTR offers several advanced features that enhance DOcker image management and security within enterprise enviroments:
 
@@ -1303,3 +1303,11 @@ Docker Trusted Registry (DTR) is a commercial enterprise-grade image storage sol
 - **Role-Based Access Control (RBAC)**: DTR integrates tightly with Docker Universal Control Plane (UCP) to provide role-based access control. Administrators can define roles and permissions for users and teams, ensuring that only authorized individuals can push, pull, or manage Docker images stored in DTR. RBAC enhances security by enforcing least privilege access principles.
 
 - **Security Vulnerability Scanning**: DTR includes built-in security vulnerability scanning for Docker images. It automatically scans images for known security vulnerabilities and issues based on databases like CVE (Common Vulnerabilities and Exposures). This proactive scanning helps organizations identify and mitigate potential security risks before deploying images into production environments.
+
+### Sizing Requirements
+
+For optimal performance and reliability of Docker's key components, it is essential to adhere to specific sizing requirements. The Universal Control Plane (UCP) and Docker Trusted Registry (DTR) have distinct resource needs that ensure smooth operation.
+
+- **Universal Control Plane (UCP)**: The Universal Control Plane is a critical component that manages and orchestrates Docker containers across multiple hosts. For manager nodes, which are responsible for maintaining cluster state and handling requests, a minimum of 8 GB memory and 2 CPUs is required. However, to enhance performance and manage larger workloads, it is recommended to allocate 16 GB memory and 4 CPUs. Worker nodes, which execute the actual container workloads, should have at least 4 GB of memory to function effectively.
+
+- **Docker Trusted Registry (DTR)**: The Docker Trusted Registry provides a secure and private image storage solution, integrated seamlessly with UCP. For DTR, the minimum configuration includes 16 GB of memory, 2 CPUs, and 10 GB of disk space. This configuration supports basic operations and small-scale deployments. For more robust performance and to accommodate larger image repositories, it is recommended to use 16 GB of memory, 4 CPUs, and a disk space ranging from 25 to 100 GB, depending on the scale and demands of your deployment.
