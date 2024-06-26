@@ -65,3 +65,51 @@ This behavior is designed to ensure that any transient issues or errors that cau
 
 Therefore, the correct action taken by the orchestrator when a container fails its liveness probe many times it to restart the unhealthy container.
 
+### 5. Is this a way to configure the Docker engine to use a registry without a trusted TLS certificate? Set INSECURE_REGISTRY in the ‘/etc/docker/default’ configuration file.
+
+- [ ] Yes.
+- [x] No.
+
+#### Explanation
+
+To configure the Docker engine to use a registry without a trusted TLS certificate, you should set the `insecure-registries` option in the Docker daemon configuration file, typically located at `/etc/docker/daemon.json`. Here's how you can do it: 
+
+Open the `/etc/docker/daemon.json` file in a text editor. If the file doesn't exist, create it. Add or modify the `ìnsecure-registries` key with the appropriate registry URL.
+
+```json
+{
+  "insecure-registries": [ "your.registry.com" ]
+}
+```
+
+### 6. Is this an advantage of multi-stage builds? Better caching when building Docker images
+
+- [ ] Yes.
+- [x] No.
+
+#### Explanation
+
+The primary advantages of multi-stage builds in Docker are:
+
+- **Smaller Final Image Size**: By copying the necessary artifacts from intermediate stages, the final image is much smaller and does not include build tools or dependencies that are only needed during the build process.
+
+- **Improved Security**: Reducing the final image size also means fewer vulnerabilities since the final image does not include unnecessary components.
+
+- **Simplified Build Process** Multi-stage builds allow for more complex build processes to be encapsulated within a single Dockerfile, making it easier to manage dependencies and build steps.
+
+Better caching is generally related to how Docker layers are structured and reused, but it is not a direct advantage of multi-stage builds.
+
+### 7. You add a new user to the engineering organization in DTR. Will this action grant them read/write access to the engineering/api repository? Add the user directly to the list of users with read/write access under the repository’s Permissions tab.
+
+- [x] Yes.
+- [ ] No.
+
+#### Explanation
+
+In Docker Trusted Registry (DTR), an organization serves as a fundamental organizational unit for managing users, teams, and repositories within a Docker environment. Organizations are pivotal for structuring access control and collaboration, particularly in large-scale deployments where multiple teams or departments need to securely manage and share Docker images.
+
+Within an organization, administrators can create teams and assign users to these teams based on their roles and responsibilities. This hierarchical approach simplifies permission management by allowing permissions to be applied at the team level. For example, an organization might have separate teams for development, QA, and operations, each with distinct access requirements to different sets of Docker repositories.
+
+Each organization in DTR can host multiple repositories, each serving as a container for Docker images related to specific applications, services, or projects. This structure not only organizes Docker images logically but also allows administrators to enforce fine-grained access controls at the repository level. Permissions can be set to control who can view, pull, push, or manage images within each repository, ensuring that sensitive or critical images are safeguarded appropriately.
+
+By utilizing organizations in DTR, companies can streamline their Docker image management workflows. This includes maintaining security by limiting access to authorized personnel, facilitating collaboration by enabling teams to share and iterate on Docker images seamlessly, and enhancing overall operational efficiency through centralized management of Docker resources. Organizations thus play a crucial role in ensuring that Docker-based deployments are secure, scalable, and well-managed across diverse teams and projects within an organization.
