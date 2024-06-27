@@ -113,3 +113,23 @@ Within an organization, administrators can create teams and assign users to thes
 Each organization in DTR can host multiple repositories, each serving as a container for Docker images related to specific applications, services, or projects. This structure not only organizes Docker images logically but also allows administrators to enforce fine-grained access controls at the repository level. Permissions can be set to control who can view, pull, push, or manage images within each repository, ensuring that sensitive or critical images are safeguarded appropriately.
 
 By utilizing organizations in DTR, companies can streamline their Docker image management workflows. This includes maintaining security by limiting access to authorized personnel, facilitating collaboration by enabling teams to share and iterate on Docker images seamlessly, and enhancing overall operational efficiency through centralized management of Docker resources. Organizations thus play a crucial role in ensuring that Docker-based deployments are secure, scalable, and well-managed across diverse teams and projects within an organization.
+
+### 8. Is this a function of UCP? Image role-based access control
+
+- [x] Yes.
+- [ ] No.
+
+#### Explanation
+
+In container environments like UCP, enforcing the use of signed images helps ensure the authenticity and integrity of the software being deployed, enhancing security by preventing unauthorized or tampered images from being used in production environments.
+
+### 9. Is this the purpose of Docker Content Trust? Enable mutual TLS between the Docker client and server.
+
+- [ ] Yes.
+- [x] No.
+
+#### Explanation
+
+Enabling mutual TLS (Tansport Layer Security) between the Docker client and server is not the primary purpose of Docker Content Trust (DCT).
+
+Docker Content Trust is primarily designed to provide a way to verify the authenticity and integrity of Docker images. It achieves this by using digital signatures to ensure that only trusted publishers can push images to a registry and that only trusted images can be pulled and deployed on Docker hosts. This helps prevent tampering with images and ensures that only verified content is used in your Docker deployments.
