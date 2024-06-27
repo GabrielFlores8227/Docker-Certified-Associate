@@ -145,7 +145,7 @@ The main purpose of Docker Content Trust is to provide a mechanism for signing a
 
 The indication of an image being an official image on Docker Hub typically comes from Docker itself or the maintainers of Docker Hub. Official images on Docker Hub are curated and maintained by Docker, ensuring they meet certain quality and security standards, but this indication is separate from the cryptographic verification provided by Docker Content Trust.
 
-### 12. In the context of a swarm mode cluster, does this describe a node? an instance of the Docker CLI connected to the swarm
+### 11. In the context of a swarm mode cluster, does this describe a node? an instance of the Docker CLI connected to the swarm.
 
 - [ ] Yes.
 - [x] No.
