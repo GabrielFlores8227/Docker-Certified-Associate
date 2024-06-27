@@ -144,3 +144,17 @@ Docker Content Trust is primarily designed to provide a way to verify the authen
 The main purpose of Docker Content Trust is to provide a mechanism for signing and verifying Docker images to ensure their authenticity and integrity. This is achieved through digital signatures that are used to verify that images have not been tampered with and that they come from trusted sources.
 
 The indication of an image being an official image on Docker Hub typically comes from Docker itself or the maintainers of Docker Hub. Official images on Docker Hub are curated and maintained by Docker, ensuring they meet certain quality and security standards, but this indication is separate from the cryptographic verification provided by Docker Content Trust.
+
+### 12. In the context of a swarm mode cluster, does this describe a node? an instance of the Docker CLI connected to the swarm
+
+- [ ] Yes.
+- [x] No.
+
+#### Explanation
+
+No, in the context of a swarm mode cluster in Docker, the term "node" refers to a member machine (physical or virtual) that participates in the Docker swarm. Each node runs Docker and serves as a part of the swarm cluster, contributing its resources (CPU, memory, storage) to run containers.
+
+The description "an instance of the Docker CLI connected to the swarm" typically refers to a Docker client that is connected to the Docker swarm to manage and interact with it using commands. However, this does not define what a "node" is within the swarm context.
+
+
+
