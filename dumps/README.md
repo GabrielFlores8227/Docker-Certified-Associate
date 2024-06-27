@@ -133,3 +133,14 @@ In container environments like UCP, enforcing the use of signed images helps ens
 Enabling mutual TLS (Tansport Layer Security) between the Docker client and server is not the primary purpose of Docker Content Trust (DCT).
 
 Docker Content Trust is primarily designed to provide a way to verify the authenticity and integrity of Docker images. It achieves this by using digital signatures to ensure that only trusted publishers can push images to a registry and that only trusted images can be pulled and deployed on Docker hosts. This helps prevent tampering with images and ensures that only verified content is used in your Docker deployments.
+
+### 10. Is this the purpose of Docker Content Trust? Indicate an image on Docker Hub is an official image.
+
+- [ ] Yes.
+- [x] No.
+
+#### Explanation
+
+The main purpose of Docker Content Trust is to provide a mechanism for signing and verifying Docker images to ensure their authenticity and integrity. This is achieved through digital signatures that are used to verify that images have not been tampered with and that they come from trusted sources.
+
+The indication of an image being an official image on Docker Hub typically comes from Docker itself or the maintainers of Docker Hub. Official images on Docker Hub are curated and maintained by Docker, ensuring they meet certain quality and security standards, but this indication is separate from the cryptographic verification provided by Docker Content Trust.
